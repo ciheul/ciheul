@@ -37,7 +37,18 @@
   </div>
 
   <div class="container">
-    <div class="timeline"></div>
+    <div class="timeline">
+      <form id="addReport" action="#">
+      <div>
+        <label for="name">Name: </label><input id="name" type="text" />
+        <label for="screen_name">Screen Name: </label><input id="screen_name" type="text" />
+        <label for="text">Text: </label><input id="text" type="text" />
+        <label for="is_like"></label><input id="is_like" type="hidden" value="false"/>
+        <label for="num_likes"></label><input id="num_likes" type="hidden" value=0 />
+        <button id="add" class="btn">Add</button>
+      </div>    
+    </form>
+    </div>
   </div>
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -52,10 +63,14 @@
   </script>
 
   <script type="text/template" id="report-template">
-    <p><%= created_at %></p>
+    <% if (typeof(created_at) !== 'undefined') { %>
+      <p><%= created_at %></p>
+    <% } %>
     <p><strong><%= name %></strong> (@<%= screen_name %>)</p>
     <p><%= text %></p>
-    <p><%= num_likes %> Joss!</p>
+    <% if (is_like === 'true') { %>
+      <p><%= num_likes %> Joss!</p>
+    <% } %>
     <hr />
   </script>
 

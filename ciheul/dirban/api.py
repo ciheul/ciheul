@@ -1,7 +1,7 @@
 from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
-from dirban import models
 from ciheul.common import MainResource
+from dirban import models
 
 
 class BusinessResource(MainResource, ModelResource):

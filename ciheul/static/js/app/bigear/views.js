@@ -24,6 +24,24 @@ app.TimelineView = Backbone.View.extend({
     this.listenTo(this.collection, 'reset', this.render);
   },
 
+  events: {
+    'click #add': 'addReport'
+  },
+
+  addReport: function(e) {
+    e.preventDefault();
+
+    var formData = {};
+    console.log("debug");
+    $('#addReport div').children('input').each(function(i, el) {
+      if ($(el).val() !== '') {
+        formData[el.id] = $(el).val();
+      }
+    });
+
+    this.collection.create(formData);
+  },
+
   render: function() {
     this.collection.each(function(item) {
       this.renderReport(item);

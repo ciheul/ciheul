@@ -6,6 +6,6 @@ app.Report = Backbone.Model.extend({
 
 
 app.Timeline = Backbone.Collection.extend({
-  url: '/report',
+  url: '/report/',
   model: app.Report,
 });

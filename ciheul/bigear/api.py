@@ -7,6 +7,7 @@ from bigear import models
 class ReportResource(MainResource, ModelResource):
     class Meta:
         queryset = models.Report.objects.all()
+        list_allow_methods = ['get', 'post']
         resource_name = 'report'
         include_resource_uri = False
         excludes = ['id']
