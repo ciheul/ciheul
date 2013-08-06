@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BigEar</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" /> 
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+  <!-- css -->
+  <link href="{{ STATIC_URL }}css/bigear.css" rel="stylesheet" />
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="#">BigEar</a>
+        <form class="navbar-search pull-left" style="float:right;padding-right:5px;">
+          <input type="text" class="search-query input-medium" size="10" placeholder="Search">
+        </form>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active"><a href="#">Timeline</a></li>
+            <li><a href="#about">Add a new place</a></li>
+            <li><a href="#contact">Settings</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="timeline"></div>
+  </div>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+
+  <script>
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR) {                    
+      options.url = 'http://{{ ip_addr }}:{{ port }}/bigear/1.0' + options.url;   
+    });  
+  </script>
+
+  <script type="text/template" id="report-template">
+    <p><%= created_at %></p>
+    <p><strong><%= name %></strong> (@<%= screen_name %>)</p>
+    <p><%= text %></p>
+    <p><%= num_likes %> Joss!</p>
+    <hr />
+  </script>
+
+  <script src="{{ STATIC_URL }}js/app/bigear/models.js"></script>
+  <script src="{{ STATIC_URL }}js/app/bigear/views.js"></script>
+  <script src="{{ STATIC_URL }}js/app.js"></script>
+
+</body>
+</html>
