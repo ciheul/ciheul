@@ -6,6 +6,13 @@ app.ReportView = Backbone.View.extend({
   template: _.template($('#report-template').html()),
 
   render: function() {
+    // convert ISO8601 to time since format
+    if (typeof(this.model.get('created_at')) === 'undefined') {
+      this.model.set('created_at', jQuery.timeago(new Date()));
+    }
+    else {
+      this.model.set('created_at', jQuery.timeago(this.model.get('created_at')));
+    }
     this.$el.html(this.template(this.model.toJSON()));
     return this;
   },
@@ -32,7 +39,6 @@ app.TimelineView = Backbone.View.extend({
     e.preventDefault();
 
     var formData = {};
-    console.log("debug");
     $('#addReport div').children('input').each(function(i, el) {
       if ($(el).val() !== '') {
         formData[el.id] = $(el).val();

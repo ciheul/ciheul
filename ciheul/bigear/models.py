@@ -12,7 +12,7 @@ class Report(models.Model):
     #geolocation isn't implemented
 
     def __unicode__(self):
-        return u'%s => %s' % (self.fullname, self.report)
+        return u'%s => %s' % (self.name, self.text)
 
 
 #class Tweet(models.Model):
