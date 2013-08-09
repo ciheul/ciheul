@@ -38,7 +38,7 @@
 
   <div class="container">
     <div class="timeline">
-      <form id="addReport" action="#">
+      <form id="addReport" action="#" data-remote="true" >
       <div>
         <label for="name">Name: </label><input id="name" type="text" />
         <label for="screen_name">Screen Name: </label><input id="screen_name" type="text" />
@@ -46,6 +46,18 @@
         <label for="is_like"></label><input id="is_like" type="hidden" value="false"/>
         <label for="num_likes"></label><input id="num_likes" type="hidden" value=0 />
         <div id="geolocation"></div>
+
+        <!--<img id="photo" style="width:100%" />
+        <input id="imageupload" type=file accepts="image/*" capture=camera data-url="/report/" enctype="multipart/form-data" />
+        <script>
+          imageupload.onchange = function(e) {
+            var files = e.target.files;
+            if (files.length > 0  && files[0].type.indexOf("image/") == 0) {
+              photo.src = URL.createObjectURL(files[0]);
+            }
+          };
+        </script>-->
+
         <button id="add" class="btn">Add</button>
       </div>    
     </form>
@@ -57,11 +69,22 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
   <script src="{{ STATIC_URL }}js/libs/jquery.timeago.js"></script>
+  <!--<script src="{{ STATIC_URL }}js/libs/jquery.ui.widget.js"></script>
+  <script src="{{ STATIC_URL }}js/libs/jquery.fileupload.js"></script>-->
 
   <script>
     $.ajaxPrefilter(function(options, originalOptions, jqXHR) {                    
       options.url = 'http://{{ ip_addr }}:{{ port }}/bigear/1.0' + options.url;   
     });  
+
+    // $(function() {
+    //   $('#imageupload').fileupload({
+    //     dataType: 'json',
+    //     done: function(e, data) {
+    //       console.log('success!');
+    //     }
+    //   });
+    // });
   </script>
 
   <script type="text/template" id="report-template">

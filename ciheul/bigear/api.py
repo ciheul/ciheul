@@ -5,6 +5,8 @@ from bigear import models
 
 
 class ReportResource(MainResource, ModelResource):
+    #image = fields.FileField(attribute='imageupload')
+
     class Meta:
         queryset = models.Report.objects.all()
         list_allow_methods = ['get', 'post']

@@ -4,19 +4,18 @@ import os
 import sys
 import socket
 import config
-from common import get_ip_port
+#from common import get_ip_port
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# add project path to python path
 DJANGO_ROOT = os.path.realpath('')
 PROJECT_PATH = os.path.join(DJANGO_ROOT, 'ciheul')
-
-# add project path to python path
 sys.path += [PROJECT_PATH]
 
 # get ip address and port.
-IP_ADDRESS, PORT = get_ip_port()
+#IP_ADDRESS, PORT = get_ip_port()
 
 ADMINS = (
     ('Winnu Ayi Satria', 'winnuayi@gmail.com'),
@@ -69,12 +68,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'static/img/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_URL = '/static/img/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files

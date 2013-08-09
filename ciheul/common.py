@@ -6,6 +6,7 @@ class MainResource():
     def alter_list_data_to_serialize(self, request, data_dict):
         data_list = data_dict['objects']
         del(data_dict)
+        print "alter!"
         return data_list
 
 
