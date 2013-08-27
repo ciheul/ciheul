@@ -43,9 +43,9 @@
         <label for="name">Name: </label><input id="name" type="text" />
         <label for="screen_name">Screen Name: </label><input id="screen_name" type="text" />
         <label for="text">Text: </label><input id="text" type="text" />
-        <label for="is_like"></label><input id="is_like" type="hidden" value="false"/>
-        <label for="num_likes"></label><input id="num_likes" type="hidden" value=0 />
         <div id="geolocation"></div>
+        <input id="is_like" type="hidden" value=0 />
+        <input id="num_likes" type="hidden" value=0 />
 
         <!--<img id="photo" style="width:100%" />
         <input id="imageupload" type=file accepts="image/*" capture=camera data-url="/report/" enctype="multipart/form-data" />
@@ -93,9 +93,9 @@
     <% } %>
     <p><strong><%= name %></strong> (@<%= screen_name %>)</p>
     <p><%= text %></p>
-    <% if (is_like === 'true') { %>
-      <p><%= num_likes %> Joss!</p>
-    <% } %>
+    //<% if (is_like === 'true') { %>
+    //  <p><%= num_likes %> Joss!</p>
+    //<% } %>
     <hr />
   </script>
 

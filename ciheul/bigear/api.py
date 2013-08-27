@@ -15,6 +15,17 @@ class ReportResource(MainResource, ModelResource):
         excludes = ['id']
         authorization = Authorization()
 
+    def dehydrate(self, bundle):
+        """Serializing. GET method."""
+        print "dehydrate"
+        print bundle.data
+        print
+        return bundle
+
+    def hydrate(self, bundle):
+        """Deserializing. POST method."""
+        bundle.data['is_like'] = int(bundle.data['is_like'])
+        return bundle
 
 #class TweetResource(MainResource, ModelResource):
 #    class Meta:

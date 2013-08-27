@@ -1,12 +1,18 @@
 import commands
 import sys
+import base64
+import PIL.Image
+import cStringIO
+import os.path
+import uuid
+
+import settings
 
 
 class MainResource():
     def alter_list_data_to_serialize(self, request, data_dict):
         data_list = data_dict['objects']
         del(data_dict)
-        print "alter!"
         return data_list
 
 
@@ -31,3 +37,22 @@ def get_ip_port():
             ip = get_local_ip_address()
         port = sys.argv[2].split(':')[1]
     return (ip, port)
+
+
+def b64save_images(b64images):
+    for b64image in b64images:
+        # decode
+        data = base64.b64decode(b64image)
+
+        file_like = cStringIO.StringIO(data)
+        img = PIL.Image.open(file_like)
+
+        # TODO investigate whether uuid is indeed unique
+        # generate random filename
+        image_name = generate_random_filename() + '.jpg'
+
+        img.save(os.path.join(settings.PROJECT_PATH, 'static/img', image_name))
+
+
+def generate_random_filename():
+    return str(uuid.uuid4())
