@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+.DS_STORE
+.ropeproject
+ciheul.db
+config.py
+send_post.txt
+ciheul/static/img/

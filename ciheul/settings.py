@@ -37,8 +37,6 @@ DATABASES = {
     }
 }
 
-TASTYPIE_DEFAULT_FORMATS = ['json']
-
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -138,15 +136,18 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     #'bootstrap_toolkit',
+    # ciheul apps
     'ciheul',
     'bigear',
     'bigdrive',
     'dirban',
+    # third plugin
+    'social_auth',
+    'registration',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -179,3 +180,33 @@ LOGGING = {
 }
 
 APPEND_SLASH = True
+
+# django-tastypie
+TASTYPIE_DEFAULT_FORMATS = ['json']
+
+# django-social-auth
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dirban/members/'
+LOGIN_ERROR_URL = '/login-error/'
+
+AUTHENTICATION_BACKENDS = {
+    'social_auth.backends.twitter.TwitterBackend',
+    'django.contrib.auth.backends.ModelBackend',
+}
+
+TEMPLATE_CONTEXT_PROCESSORS = {
+    'social_auth.context_processors.social_auth_by_type_backends',
+    'django.contrib.auth.context_processors.auth',
+}
+
+SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+SOCIAL_AUTH_UID_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+
+SOCIAL_AUTH_ENABLED_BACKENDS = {'twitter'}
+
+TWITTER_CONSUMER_KEY = config.CONSUMER_KEY
+TWITTER_CONSUMER_SECRET = config.CONSUMER_SECRET

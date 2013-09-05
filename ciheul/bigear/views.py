@@ -7,4 +7,10 @@ def home(request):
     # import process keeps changing IP_ADDR to '127.0.0.1'
     IP_ADDRESS = '127.0.0.1'
     PORT = '8000'
-    return render(request, "base.html", {'ip_addr': IP_ADDRESS, 'port': PORT})
+    params = {
+        'title_head': 'BigEar - Social Analytics',
+        'title': 'BigEar',
+        'ip_addr': IP_ADDRESS,
+        'port': PORT,
+    }
+    return render(request, "base_bigear.html", params)
