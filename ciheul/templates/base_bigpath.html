@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="#">{{ title }}</a>
+        <form class="navbar-search pull-left" style="float:right;padding-right:5px;">
+          <input type="text" class="search-query input-medium" size="10" placeholder="Search">
+        </form>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active"><a href="#">Beranda</a></li>
+            <li><a href="#about">Tambah Tempat Baru</a></li>
+            <li><a href="#contact">Pengaturan</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block container %}
+  <div class="container">
+    <div id="map">
+      <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+      <script src="http://127.0.0.1:8000/static/js/app/bigpath/map.js"></script>
+      <script src="http://127.0.0.1:8000/static/js/app/bigpath/us-states.js"></script>
+      <script type="text/javascript">
+        //callMap();
+        //callMapGeoJson();
+        //callMapGeo();
+        callCloropeth();
+      </script>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+{% endblock %}

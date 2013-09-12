@@ -53,6 +53,12 @@ def b64save_images(b64images):
 
         img.save(os.path.join(settings.PROJECT_PATH, 'static/img', image_name))
 
+def save_image(b64image):
+    data = base64.b64decode(b64image)
+    file_like = cStringIO.StringIO(data)
+    img = PIL.image.open(file_like)
 
-def generate_random_filename():
+
+def generate_system_name():
     return str(uuid.uuid4())
+

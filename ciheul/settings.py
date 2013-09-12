@@ -33,7 +33,7 @@ DATABASES = {
         'USER': config.USER,
         'PASSWORD': config.PASS,
         'HOST': config.HOST,
-        'PORT': '',
+        'PORT': config.PORT,
     }
 }
 
@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.gis',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     #'bootstrap_toolkit',
@@ -145,6 +146,8 @@ INSTALLED_APPS = (
     'bigear',
     'bigdrive',
     'dirban',
+    'bigpath', 
+    'south',
     # third plugin
     'social_auth',
     'registration',
