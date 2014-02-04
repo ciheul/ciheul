@@ -1,0 +1,115 @@
+/* CSS Resets */
+
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,address,cite,code,del,dfn,em,img,ins,q,small,strong,sub,sup,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{border:0;margin:0;padding:0}article,aside,figure,figure img,figcaption,hgroup,footer,header,nav,section,video,object{display:block}a img{border:0}figure{position:relative}figure img{width:100%}
+
+/* Make HTML 5 elements display block-level for consistent styling */
+header, nav, article, footer, address {
+    display: block;
+}
+
+body {
+  font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: normal;
+  color: #fff;
+  background-color: #000;
+  margin: 30px auto;
+  width: 600px;
+}
+
+
+header {
+  padding-top: 5em;
+  padding-bottom: 1em;
+}
+
+header img {
+  margin: 0 auto;
+  display: block;
+}
+
+header h1 {
+  font-family: "Titillium Web, sans-serif";
+  font-size: 6em;
+  color: #81b82f;
+}
+
+a {
+  color: #8ED2FB;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue", sans-serif;
+  font-weight: bold;
+  font-stretch: condensed;
+
+  margin-top: 1em;
+  color: #777;
+  font-size: 0.8em;
+
+  //text-align: center;
+}
+
+footer hr {
+  margin-top: 3em;
+  margin-bottom: 1em;
+}
+
+div#main {
+}
+
+article {
+  margin: 0 auto 1em;
+}
+
+article h2 {
+  font-size: 1.5714em;
+  font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue", sans-serif;
+  font-weight: bold;
+  font-stretch: condensed;
+  color: #fff;
+  padding-bottom: 0.2em;
+}
+
+label {
+  color: #bcbcbc;
+  font-weight: bold;
+}
+
+p {
+  line-height: 135%;
+  padding-bottom: 1em;
+  color: #bcbcbc;
+}
+
+
+/* Mobile */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  div#main, footer {
+    margin-left: .5em;
+    margin-right: .5em;
+  }
+
+  body, article {
+    width: 100%;
+    margin: 0 0 1em;
+  }
+}
+
+
+/* iPhone 4 - as above*/
+@media only screen
+and (-webkit-min-device-pixel-ratio: 2) {
+  div#main, footer {
+  }
+
+  body, article {
+  }
+}

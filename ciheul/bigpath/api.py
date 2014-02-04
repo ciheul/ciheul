@@ -26,7 +26,7 @@ class ShelterResource(MainResource, ModelResource):
         resource_name = 'shelter'
         include_resource_uri = False
         excludes = ['id', 'is_deleted']
-        authorization = Authorization() 
+        authorization = Authorization()
 
     def dehydrate(self, bundle):
         """Serializing. GET method."""
@@ -62,9 +62,9 @@ class ShelterResource(MainResource, ModelResource):
         bundle.data['updated_at'] = datetime.datetime.now()
         return bundle
 
-class ImageResource(MainResource, ModelResource): 
+class ImageResource(MainResource, ModelResource):
     shelter = fields.ForeignKey(ShelterResource, 'shelter')
-    user = fields.ForeignKey(UserResource, 'user')   
+    user = fields.ForeignKey(UserResource, 'user')
 
     class Meta:
         queryset = Image.objects.all()

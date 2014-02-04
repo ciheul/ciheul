@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'bigdrive',
     'dirban',
     'bigpath', 
+    'juara',
     'south',
     # third plugin
     'social_auth',
