@@ -26,6 +26,7 @@ def setup():
     # check following link to login:
     # - https://help.ubuntu.com/community/PostgreSQL
     sudo("apt-get -y install postgresql")
+    sudo("apt-get -y install supervisor")
 
     sudo("pip install virtualenv")
 
@@ -47,6 +48,16 @@ def deploy():
     with prefix("source " + os.path.join(VENV_CIHEUL_DIR, 'bin/activate')):
         with cd(CIHEUL_DIR):
             run("pip install -r requirements.txt")
+
+    # send config file.
+    put('ciheul/config.py', os.path.join(CIHEUL_DIR, 'ciheul/config.py'))
+
+    # create directory for supervisor output if necessary
+    sudo('mkdir -p /var/log/supervisor')
+
+    # copy ciheul's supervisor configuration to supervisor directory
+    put('supervisor_ciheul.conf', '/etc/supervisor/conf.d/ciheul.conf', use_sudo=True)
+    sudo('supervisorctl reread && supervisorctl update')
 
 
 def clean():

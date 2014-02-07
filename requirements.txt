@@ -10,5 +10,4 @@ PIL==1.1.7
 south==0.8.2
 yolk==0.4.3
 gunicorn==18.0
-supervisor==3.0
 fabric==1.8.1
