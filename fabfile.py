@@ -60,4 +60,5 @@ def clean():
 def update_ciheul():
     """Update to the latest version."""
     with cd(CIHEUL_DIR):
+        run('git stash')
         run('git pull')
