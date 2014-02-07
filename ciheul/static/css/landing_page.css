@@ -11,15 +11,14 @@ body {
   font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: normal;
-  color: #fff;
-  background-color: #000;
-  margin: 30px auto;
+  color: #555;
+  background-color: #fff;
+  margin: 20px auto;
   width: 600px;
 }
 
 
 header {
-  padding-top: 5em;
   padding-bottom: 1em;
 }
 
@@ -30,7 +29,7 @@ header img {
 
 header h1 {
   font-family: "Titillium Web, sans-serif";
-  font-size: 6em;
+  font-size: 5em;
   color: #81b82f;
 }
 
@@ -56,8 +55,8 @@ footer {
 }
 
 footer hr {
-  margin-top: 3em;
-  margin-bottom: 1em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
 }
 
 div#main {
@@ -72,19 +71,23 @@ article h2 {
   font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue", sans-serif;
   font-weight: bold;
   font-stretch: condensed;
-  color: #fff;
+  color: #555;
   padding-bottom: 0.2em;
 }
 
+article .social {
+  margin: 5px auto;
+}
+
 label {
-  color: #bcbcbc;
+  color: #555;
   font-weight: bold;
 }
 
 p {
   line-height: 135%;
   padding-bottom: 1em;
-  color: #bcbcbc;
+  color: #555;
 }
 
 
@@ -92,6 +95,10 @@ p {
 @media only screen
 and (min-device-width : 320px)
 and (max-device-width : 480px) {
+  header {
+    padding-top: .5em;
+  }
+
   div#main, footer {
     margin-left: .5em;
     margin-right: .5em;

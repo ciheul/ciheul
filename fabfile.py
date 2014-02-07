@@ -10,7 +10,8 @@ env.password = 'liverpool'
 #env.port = 13203
 env.colorize_errors = True
 
-PROJECTS_DEV_DIR = '~'
+PROJECTS_DEV_DIR = '~/Projects/dev'
+#PROJECTS_DEV_DIR = '~'
 BACKEND_DIR = os.path.join(PROJECTS_DEV_DIR, 'www')
 CIHEUL_DIR = os.path.join(BACKEND_DIR, 'ciheul')
 VENV_DIR = os.path.join(PROJECTS_DEV_DIR, 'virtualenv')
@@ -22,6 +23,9 @@ GIT_CIHEUL = 'https://github.com/ciheul/ciheul'
 def setup():
     """Install all dependencies."""
     sudo("apt-get -y install nginx")
+    # check following link to login:
+    # - https://help.ubuntu.com/community/PostgreSQL
+    sudo("apt-get -y install postgresql")
 
     sudo("pip install virtualenv")
 
@@ -46,8 +50,10 @@ def deploy():
 
 
 def clean():
-    """Remove anything related to BigCrawler."""
+    """Remove anything related to Ciheul."""
     with cd(BACKEND_DIR):
+        run("rm -rf ciheul")
+    with cd(VENV_DIR):
         run("rm -rf ciheul")
 
 
