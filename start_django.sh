@@ -9,7 +9,10 @@ NUM_WORKERS=2
 #USER=winnuayi
 #GROUP=winnuayi
 
-PROJECTS_DEV_DIR='/home/winnuayi/Projects/dev'
+# get project dev directory
+cd ../..
+PROJECTS_DEV_DIR=$(pwd)
+echo $PROJECTS_DEV_DIR
 
 # create folder for logging if necessary
 #test -d $LOGDIR || sudo mkdir -p $LOGDIR
@@ -19,7 +22,4 @@ source $PROJECTS_DEV_DIR/virtualenv/ciheul/bin/activate
 
 # start running django with gunicorn
 cd $PROJECTS_DEV_DIR/www/ciheul
-#exec gunicorn ciheul.wsgi:application -w $NUM_WORKERS 
-#  --user=$USER --group=$GROUP --log-level=debug 
-#  --log-file=$LOGFILE 2>>$LOGFILE &
 exec gunicorn ciheul.wsgi:application -w $NUM_WORKERS
