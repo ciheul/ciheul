@@ -1,7 +1,7 @@
 import os
 from contextlib import contextmanager
 from fabric.api import *
-from fabric.contrib.files import exists
+from fabric.contrib.files import exists, sed
 
 
 # main configuration
@@ -91,13 +91,22 @@ def deploy():
     sudo('mkdir -p /var/log/supervisor')
 
     # copy ciheul's supervisor configuration to supervisor directory
-    put('supervisor_ciheul.conf', '/etc/supervisor/conf.d/ciheul.conf', use_sudo=True)
+    put('supervisor_ciheul.conf', '/etc/supervisor/conf.d/ciheul.conf', 
+        use_sudo=True)
+
+    # replace command path based on its different directory 
+    with cd(env.CIHEUL_DIR):
+        x = run("echo `pwd`/start_django.sh")
+    sed("/etc/supervisor/conf.d/ciheul.conf", "replace_cmd_path", x, use_sudo=True)
+        
     sudo('supervisorctl reread && supervisorctl update')
     sudo('supervisorctl start ciheul')
 
 
+@task
 def clean():
     """Remove anything related to Ciheul."""
+    init_directory()
     with cd(env.BACKEND_DIR):
         run("rm -rf ciheul")
     with cd(env.VENV_DIR):
@@ -107,15 +116,17 @@ def clean():
 @task
 def update():
     """Update to the latest version."""
+    init_directory()
     with cd(env.CIHEUL_DIR):
         run('git stash')
         run('git pull')
 
 
 @task
-@roles('production')
+#@roles('production')
 def cmd(command):
-    run(command)
+    with settings(warn_only=True):
+        run(command)
 
 
 @task
@@ -127,3 +138,14 @@ def echo():
     run("echo " + env.CIHEUL_DIR)
     run("echo " + env.VENV_DIR)
     run("echo " + env.VENV_CIHEUL_DIR)
+
+
+@task
+@with_settings(warn_only=True)
+def super():
+    init_directory()
+    with cd(env.CIHEUL_DIR):
+        #sudo("x=$(echo `pwd`/start_django.sh | sed \"s/\//\\\//g\"); sed -i \"s/{{command}}/$x/g\" /etc/supervisor/conf.d/ciheul.conf")
+        #x = run("echo `pwd`/start_django.sh | sed \"s/\//\\\//g\"")
+        x = run("echo `pwd`/start_django.sh")
+    sed("/etc/supervisor/conf.d/ciheul.conf", "replace_cmd_path", x, use_sudo=True)
