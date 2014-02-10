@@ -2,16 +2,18 @@ import os
 from contextlib import contextmanager
 from fabric.api import *
 from fabric.contrib.files import exists, sed
+from urlparse import urlsplit
 
 
 # main configuration
-env.user = 'winnuayi'
-env.password = 'liverpool'
-env.hosts = ['192.168.1.2', '192.168.1.3']
+env.hosts = [
+#        'winnuayi@192.168.1.2:22', 'winnuayi@192.168.1.3:22', 
+        'dev@62.113.218.221:13203'
+]
 
 env.roledefs = {
-    "production": ["192.168.1.3"],
     "development": ["192.168.1.2"],
+    "production": ["192.168.1.3", "62.113.218.221"],
 }
 
 # invert roledefs
@@ -19,9 +21,6 @@ env.invert_roledefs = {}
 for i in env.roledefs:
     for j in env.roledefs[i]:
         env.invert_roledefs[j] = i
-
-#env.hosts = ['dev@62.113.218.221']
-#env.port = 13203
 
 # misc. configuration
 env.colorize_errors = True
@@ -39,7 +38,9 @@ env.directories = {
 def init_directory():
     """Production and Development server have different project root 
        directory."""
-    env.PROJECTS_DEV_DIR = env.directories[env.invert_roledefs[env.host_string]]
+    o = urlsplit('ssh://' + env.host_string)
+    #env.PROJECTS_DEV_DIR = env.directories[env.invert_roledefs[env.host_string]]
+    env.PROJECTS_DEV_DIR = env.directories[env.invert_roledefs[o.hostname]]
     env.BACKEND_DIR = os.path.join(env.PROJECTS_DEV_DIR, 'www')
     env.CIHEUL_DIR = os.path.join(env.BACKEND_DIR, 'ciheul')
     env.VENV_DIR = os.path.join(env.PROJECTS_DEV_DIR, 'virtualenv')
@@ -63,7 +64,7 @@ def setup():
 
 
 @task
-@parallel
+#@parallel
 def deploy():
     """Deploy Ciheul.com web."""
     setup()
@@ -96,21 +97,27 @@ def deploy():
 
     # replace command path based on its different directory 
     with cd(env.CIHEUL_DIR):
-        x = run("echo `pwd`/start_django.sh")
-    sed("/etc/supervisor/conf.d/ciheul.conf", "replace_cmd_path", x, use_sudo=True)
+        x = run("echo `pwd`")
+    sed("/etc/supervisor/conf.d/ciheul.conf", "replace_ciheul_dir", x, 
+        use_sudo=True)
         
     sudo('supervisorctl reread && supervisorctl update')
-    sudo('supervisorctl start ciheul')
+    #sudo('supervisorctl start ciheul')
 
 
 @task
+#@parallel
 def clean():
     """Remove anything related to Ciheul."""
     init_directory()
     with cd(env.BACKEND_DIR):
         run("rm -rf ciheul")
-    with cd(env.VENV_DIR):
-        run("rm -rf ciheul")
+    #with cd(env.VENV_DIR):
+    #    run("rm -rf ciheul")
+    sudo('supervisorctl stop ciheul && supervisorctl remove ciheul')
+    with settings(warn_only=True):
+        run("pkill gunicorn")
+
 
 
 @task
