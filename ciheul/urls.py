@@ -18,6 +18,7 @@ from juara.api import AdministrativeResource
 import juara.views
 
 import bigcrawler.views
+import jendela24.views
 
 v1_api = Api(api_name='1.0')
 v1_api.register(ReportResource())
@@ -31,9 +32,12 @@ v1_juara_api.register(AdministrativeResource())
 
 urlpatterns = patterns(
     '',
+    url(r'', include('social_auth.urls')),
+    url(r'^socket\.io/', jendela24.views.socketio),
+    url(r'^jendela24/$', jendela24.views.home),
+    url(r'^bigcrawler/$', bigcrawler.views.home),
     url('', home.views.home),
     #(r'^admin/', include(admin.site.urls)),
-    #url(r'', include('social_auth.urls')),
     #url(r'^juara/', include(v1_juara_api.urls)),
     #url(r'^juara/$', juara.views.home),
     #url(r'^dirban/members/$', dirban.views.members),
@@ -43,5 +47,4 @@ urlpatterns = patterns(
     #url(r'^dirban/$', dirban.views.home),
     #url(r'^bigpath/', include(v1_api.urls)),
     #url(r'^bigpath/$', bigpath.views.home),
-    #url(r'^bigcrawler/$', bigcrawler.views.home),
 )

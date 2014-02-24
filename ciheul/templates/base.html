@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" /> 
   <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
   <!-- css -->
-  <!--link href="{{ STATIC_URL }}css/ciheul.css" rel="stylesheet" /-->
-  <link href="http://127.0.0.1:8000/static/css/ciheul.css" rel="stylesheet" />
-  <link href="http://127.0.0.1:8000/static/css/bigpath.css" rel="stylesheet" />
+  <link href="{% static "/static/css/ciheul.css" %}" rel="stylesheet" >
+  <!--<link href="http://127.0.0.1:8000/static/css/ciheul.css" rel="stylesheet" />
+  <link href="http://127.0.0.1:8000/static/css/bigpath.css" rel="stylesheet" />-->
   <link href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" rel="stylesheet" />
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" />
   <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet" />

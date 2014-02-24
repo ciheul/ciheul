@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block navbar %}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="">{{ title }}</a>
+        <form class="navbar-search pull-left" style="float:right;padding-right:5px;">
+          <input type="text" class="search-query input-medium" size="10" placeholder="Search">
+        </form>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li><a href="register">Register</a></li>
+            <li><a href="{% url 'socialauth_begin' 'twitter' %}">Login</a></li>
+            <li><a href="add-new-place">Tambah Tempat Baru</a></li>
+            <li><a href="setting">Pengaturan</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block container %}
+<div class="container">
+  <pre class="news_title"></pre>
+  <div class="news_overview"></div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="{% static "/static/js/libs/socket.io.min.js" %}"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var socket = io.connect("http://192.168.1.100:8080/jendela24/news") 
+      //var socket = io.connect("http://localhost:8000/jendela24/news")          
+      socket.emit("subscribe");
+      socket.on("news_via_socketio", function(data) {
+        $(".news_title").append(data);
+      });
+    });
+  </script>
+{% endblock %}
+

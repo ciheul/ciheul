@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+#
+# Author: Winnu Ayi Satria
+# Description:
+#   Starting mongod outside from the headquarter needs additional arguments to
+#   bind IP address. This script task is to recognize whether adding arguments
+#   is necessary or not.
+
+
+# need to declare this on Mac OS
+ulimit -n 1024
+
+# get ip address on Mac OS
+ip_address=`ifconfig | grep broadcast | tr -d '\t' | cut -d ' ' -f2`
+
+# get first numerical
+first_part=`echo $ip_address | cut -d '.' -f1`
+
+# compare as a number. 
+if [ -n $ip_address ] || [ -$first_part -eq 192 ]; then
+    # execute Mongo daemon on localhost, even if the internet connection comes
+    # by tethering a smartphone (ex: 172.20.10.2)
+    mongod &
+    echo "mongod runs on 127.0.0.1 (localhost)"
+else
+    mongod --bind_ip $ip_address &
+    echo "mongod runs on" $ip_address
+fi

@@ -7,12 +7,15 @@ from urlparse import urlsplit
 
 # main configuration
 env.hosts = [
-#        'winnuayi@192.168.1.2:22', 'winnuayi@192.168.1.3:22', 
-        'dev@62.113.218.221:13203'
+#        'winnuayi@192.168.1.2:22',
+#        'winnuayi@192.168.1.3:22', 
+        'dev@192.168.1.103',
+#        'dev@62.113.218.221:13203',
 ]
 
 env.roledefs = {
-    "development": ["192.168.1.2"],
+    "development": ["192.168.1.103"],
+    "development_proj": ["192.168.1.2"],
     "production": ["192.168.1.3", "62.113.218.221"],
 }
 
@@ -31,7 +34,8 @@ GIT_CIHEUL = 'https://github.com/ciheul/ciheul'
 # root directory
 env.directories = {
         "production": '~',
-        "development": '~/Projects/dev'        
+        "development": '~',        
+        "development_proj": '~/Projects/dev'        
 }
 
 
@@ -39,10 +43,9 @@ def init_directory():
     """Production and Development server have different project root 
        directory."""
     o = urlsplit('ssh://' + env.host_string)
-    #env.PROJECTS_DEV_DIR = env.directories[env.invert_roledefs[env.host_string]]
     env.PROJECTS_DEV_DIR = env.directories[env.invert_roledefs[o.hostname]]
-    env.BACKEND_DIR = os.path.join(env.PROJECTS_DEV_DIR, 'www')
-    env.CIHEUL_DIR = os.path.join(env.BACKEND_DIR, 'ciheul')
+    env.WWW_DIR = os.path.join(env.PROJECTS_DEV_DIR, 'www')
+    env.CIHEUL_DIR = os.path.join(env.WWW_DIR, 'ciheul')
     env.VENV_DIR = os.path.join(env.PROJECTS_DEV_DIR, 'virtualenv')
     env.VENV_CIHEUL_DIR = os.path.join(env.VENV_DIR, 'ciheul')
 
@@ -51,15 +54,17 @@ def setup():
     """Install all dependencies."""
     with settings(warn_only=True):
         sudo("apt-get -y install nginx")
-
         # check following link to login:
         # - https://help.ubuntu.com/community/PostgreSQL
         sudo("apt-get -y install postgresql")
-
+        sudo("apt-get -y install libpq-dev")
+        sudo("apt-get -y install gcc g++")
+        sudo("apt-get -y install python-dev")
+        sudo("apt-get -y install openjdk-6-jdk")
         # GIS
         sudo("apt-get -y install gdal-bin")
-
         sudo("apt-get -y install supervisor")
+        sudo("apt-get -y install python-pip")
         sudo("pip install virtualenv")
 
 
@@ -77,8 +82,8 @@ def deploy():
 
     # for the first time, git clone. otherwise, ignore
     if not exists(env.CIHEUL_DIR):
-        run("mkdir -p " + env.BACKEND_DIR)
-        with cd(env.BACKEND_DIR):
+        run("mkdir -p " + env.WWW_DIR)
+        with cd(env.WWW_DIR):
             run('git clone ' + GIT_CIHEUL)
 
     with prefix("source " + os.path.join(env.VENV_CIHEUL_DIR, 'bin/activate')):
@@ -110,7 +115,7 @@ def deploy():
 def clean():
     """Remove anything related to Ciheul."""
     init_directory()
-    with cd(env.BACKEND_DIR):
+    with cd(env.WWW_DIR):
         run("rm -rf ciheul")
     #with cd(env.VENV_DIR):
     #    run("rm -rf ciheul")
@@ -141,7 +146,7 @@ def cmd(command):
 def echo():
     init_directory()
     run("echo " + env.PROJECTS_DEV_DIR)
-    run("echo " + env.BACKEND_DIR)
+    run("echo " + env.WWW_DIR)
     run("echo " + env.CIHEUL_DIR)
     run("echo " + env.VENV_DIR)
     run("echo " + env.VENV_CIHEUL_DIR)
