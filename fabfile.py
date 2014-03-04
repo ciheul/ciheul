@@ -9,12 +9,19 @@ from urlparse import urlsplit
 env.hosts = [
 #        'winnuayi@192.168.1.2:22',
 #        'winnuayi@192.168.1.3:22', 
-        'dev@192.168.1.103',
+        'dev@192.168.1.3',
 #        'dev@62.113.218.221:13203',
 ]
 
+# root directory
+env.directories = {
+        "production": '~',
+        "development": '~',        
+        "development_proj": '~/Projects/dev'        
+}
+
 env.roledefs = {
-    "development": ["192.168.1.103"],
+    "development": ["192.168.1.3"],
     "development_proj": ["192.168.1.2"],
     "production": ["192.168.1.3", "62.113.218.221"],
 }
@@ -30,13 +37,6 @@ env.colorize_errors = True
 
 # github
 GIT_CIHEUL = 'https://github.com/ciheul/ciheul'
-
-# root directory
-env.directories = {
-        "production": '~',
-        "development": '~',        
-        "development_proj": '~/Projects/dev'        
-}
 
 
 def init_directory():
@@ -57,6 +57,9 @@ def setup():
         # check following link to login:
         # - https://help.ubuntu.com/community/PostgreSQL
         sudo("apt-get -y install postgresql")
+        sudo("apt-get -y install redis-server")
+        sudo("apt-get -y install rabbitmq-server")
+
         sudo("apt-get -y install libpq-dev")
         sudo("apt-get -y install gcc g++")
         sudo("apt-get -y install python-dev")
@@ -75,6 +78,7 @@ def deploy():
     setup()
     init_directory()
 
+    # create virtualenv for ciheul if necessary
     if not exists(env.VENV_CIHEUL_DIR):
         run("mkdir -p " + env.VENV_DIR)
         with cd(env.VENV_DIR):
@@ -86,6 +90,7 @@ def deploy():
         with cd(env.WWW_DIR):
             run('git clone ' + GIT_CIHEUL)
 
+    # install python packages using pip
     with prefix("source " + os.path.join(env.VENV_CIHEUL_DIR, 'bin/activate')):
         with cd(env.CIHEUL_DIR):
             run("pip install -r requirements.txt")
@@ -100,12 +105,14 @@ def deploy():
     put('supervisor_ciheul.conf', '/etc/supervisor/conf.d/ciheul.conf', 
         use_sudo=True)
 
-    # replace command path based on its different directory 
+    # replace command path depends on its different directory.
+    # check 'env.directories'. pwd command to recognize ciheul directory.
     with cd(env.CIHEUL_DIR):
         x = run("echo `pwd`")
     sed("/etc/supervisor/conf.d/ciheul.conf", "replace_ciheul_dir", x, 
         use_sudo=True)
         
+    # update supervisor
     sudo('supervisorctl reread && supervisorctl update')
     #sudo('supervisorctl start ciheul')
 
@@ -115,10 +122,16 @@ def deploy():
 def clean():
     """Remove anything related to Ciheul."""
     init_directory()
+
+    # remove ciheul web directory
     with cd(env.WWW_DIR):
         run("rm -rf ciheul")
+
+    # remove ciheul virtualenv
     #with cd(env.VENV_DIR):
     #    run("rm -rf ciheul")
+
+    # stop supervisor for ciheul
     sudo('supervisorctl stop ciheul && supervisorctl remove ciheul')
     with settings(warn_only=True):
         run("pkill gunicorn")
@@ -132,6 +145,16 @@ def update():
     with cd(env.CIHEUL_DIR):
         run('git stash')
         run('git pull')
+
+    # install python packages using pip
+    with prefix("source " + os.path.join(env.VENV_CIHEUL_DIR, 'bin/activate')):
+        with cd(env.CIHEUL_DIR):
+            put('requirements.txt', \
+                    os.path.join(env.CIHEUL_DIR, 'requirements.txt'))
+            run("pip install -r requirements.txt")
+            
+            put('start_realtime_django.sh', \
+                    os.path.join(env.CIHEUL_DIR, 'start_realtime_django.sh'))
 
 
 @task

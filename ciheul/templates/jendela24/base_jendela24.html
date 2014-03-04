@@ -35,14 +35,15 @@
 {% endblock %}
 
 {% block javascript %}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
+  <script src="{% static "/static/js/libs/jquery-2.1.0.min.js" %}"></script>
   <script src="{% static "/static/js/libs/socket.io.min.js" %}"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+  <script src="{% static "/static/js/libs/bootstrap.min.js" %}"></script>
+  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>-->
 
   <script type="text/javascript">
     $(document).ready(function() {
-      var socket = io.connect("http://192.168.1.100:8080/jendela24/news") 
-      //var socket = io.connect("http://localhost:8000/jendela24/news")          
+      var socket = io.connect("http://192.168.1.101/jendela24/news") 
       socket.emit("subscribe");
       socket.on("news_via_socketio", function(data) {
         $(".news_title").append(data);

@@ -4,6 +4,7 @@ from celery import Celery
 from django.conf import settings
 from redis import StrictRedis
 import time
+import feedparser
 
 
 # set the default Django settings module for the 'celery' program
@@ -30,3 +31,18 @@ def publish_news():
         print "msg:" + msg
         redis.publish("news_from_redis", msg)
         time.sleep(0.1)
+
+
+@app.task
+def fetch_rss():
+    #rss_url = 'http://rss.kontan.co.id/v2/investasi'
+    #rss = feedparser.parse(rss_url)
+    #rss = ['xxx', 'yyy', 'zzz']
+    #k = 1
+    #v = 'hello'
+    for r in rss:
+       redis.rpush('kontan', r)
+    #    redis.zadd()
+    #rss = {'x': 1}
+    print k, v 
+    #return k, v

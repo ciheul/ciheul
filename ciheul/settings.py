@@ -4,6 +4,7 @@ import os
 import sys
 import socket
 import config
+from datetime import timedelta
 #from common import get_ip_port
 
 DEBUG = True
@@ -150,6 +151,7 @@ INSTALLED_APPS = (
     'dirban',
     'bigpath', 
     'juara',
+    'jendela24',
     'south',
     # third plugin
     'social_auth',
@@ -216,3 +218,13 @@ SOCIAL_AUTH_ENABLED_BACKENDS = {'twitter'}
 
 TWITTER_CONSUMER_KEY = config.CONSUMER_KEY
 TWITTER_CONSUMER_SECRET = config.CONSUMER_SECRET
+
+BROKER_URL='amqp://'
+CELERY_RESULT_BACKEND = 'redis://'
+
+CELERYBEAT_SCHEDULE = {
+    'fetch-rss-every-15-seconds': {
+        'task': 'jendela24.celery.fetch_rss',
+        'schedule': timedelta(seconds=15),
+    },        
+}
