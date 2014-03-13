@@ -12,7 +12,6 @@ redis = StrictRedis('localhost')
 
 def home(request):
     context = {
-        'title_head': 'Jendela24',
         'title': 'Jendela24',
     }
     q = request.GET.get('q', '')

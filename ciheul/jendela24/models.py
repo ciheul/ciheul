@@ -1,3 +1,9 @@
 from django.db import models
 
-# Create your models here.
+
+class RssNews(models.Model):
+    title = models.CharField(max_length=150)
+    url = models.URLField(unique=True)
+    summary = models.TextField()
+    created_at = models.DateTimeField(auto_now=True, auto_now_add=True)
+    published_at = models.DateTimeField()

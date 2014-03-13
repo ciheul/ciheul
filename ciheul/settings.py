@@ -154,6 +154,7 @@ INSTALLED_APPS = (
     'jendela24',
     'south',
     # third plugin
+    'tastypie',
     'social_auth',
     'registration',
 )
@@ -187,7 +188,7 @@ LOGGING = {
     }
 }
 
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 # django-tastypie
 TASTYPIE_DEFAULT_FORMATS = ['json']
@@ -223,8 +224,8 @@ BROKER_URL='amqp://'
 CELERY_RESULT_BACKEND = 'redis://'
 
 CELERYBEAT_SCHEDULE = {
-    'fetch-rss-every-15-seconds': {
+    'fetch-rss-every-10-minutes': {
         'task': 'jendela24.celery.fetch_rss',
-        'schedule': timedelta(seconds=15),
+        'schedule': timedelta(minutes=5),
     },        
 }
