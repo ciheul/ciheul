@@ -1,0 +1,41 @@
+body { 
+    padding-top:60px;
+}
+
+.news_overview {
+    width: 640px;
+}
+
+h4 {
+    padding-bottom: 10px;
+}
+
+ul.newsfeed {
+    margin: 0;
+}
+
+ul.newsfeed li {
+    border-top: 1px solid #ccc;
+    padding: 0.4em 0 0.4em 1.1em; 
+    list-style: none;
+    font-size: 0.9em;
+}
+
+ul.newsfeed li:hover {
+    background-color: #eee;
+}
+
+ul.newsfeed li a {
+    display: block;
+    color: #0074cc;
+}
+
+ul.newsfeed li a:hover {
+    text-decoration: none;
+    color: #0074cc;
+}
+
+ul.newsfeed li a time {
+    color: #434343;
+    padding-left: 0.5em;
+}

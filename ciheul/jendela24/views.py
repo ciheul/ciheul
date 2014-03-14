@@ -13,6 +13,7 @@ redis = StrictRedis('localhost')
 def home(request):
     context = {
         'title': 'Jendela24',
+        'app_css': 'jendela24.css',
     }
     q = request.GET.get('q', '')
     if q:
@@ -30,8 +31,9 @@ def socketio(request):
 
 
 class NewsNamespace(BaseNamespace):
-    def on_subscribe(self):
+    def on_subscribe(self, msg):
         print "on_subscribe"
+        print msg
         self.sub = redis.pubsub()
         self.spawn(self.listen)
 

@@ -8,6 +8,7 @@ from datetime import datetime
 from time import mktime
 import feedparser
 import psycopg2
+import rfc822
 
 
 # set the default Django settings module for the 'celery' program
@@ -43,37 +44,55 @@ def fetch_rss():
     cursor = conn.cursor()
     print "Connected to database!\n"
     
-    rss_list = [
-        'http://rss.kontan.co.id/v2/all',        
-        'http://www.pikiran-rakyat.com/feed/bandung-raya',
-    ]
-    
-    feed = feedparser.parse(rss_list[0])
-    #feed = feedparser.parse(r'bandung-raya')
-    for f in feed['entries']:
-        # sql insert. only unique news is inserted. not Django-way
-        insert_string = """
-            INSERT INTO jendela24_rssnews 
-                (title, url, summary, created_at, published_at)
-                SELECT %s, %s, %s, %s, %s
-                WHERE NOT EXISTS (SELECT 1 FROM jendela24_rssnews WHERE url=%s)
-        """
-    
-        # insert rss news to database
-        cursor.execute(insert_string, (f['title'], f['link'], f['summary'], 
-                datetime.now(), convert_time(f['published_parsed']), f['link']))
-        conn.commit()
-    
-        # info
-        print convert_time(f['published_parsed'])
-        print 'title:', f['title']
+    rss_list = open('ciheul/jendela24/rss_list.txt', 'r')
+    for rss in rss_list:
+        # ignore commented line
+        if rss.startswith('#'): continue
+
+        feed = feedparser.parse(rss)
+        print rss
         print
+        #feed = feedparser.parse(r'bandung-raya')
+        for f in feed['entries']:
+            # ignore mobile link
+            if filter_mobile_url(f['links']): continue
+
+            print f['link']
+            # sql insert. only unique news is inserted. not Django-way
+            insert_string = """
+                INSERT INTO jendela24_rssnews 
+                    (title, url, summary, created_at, published_at)
+                    SELECT %s, %s, %s, %s, %s
+                    WHERE NOT EXISTS (SELECT 1 FROM jendela24_rssnews WHERE url=%s)
+            """
+        
+            # insert rss news to database
+            cursor.execute(insert_string, 
+                    (f['title'], f['link'], f['summary'], datetime.now(), 
+                    convert_pub_date(f['published']), f['link']))
+            conn.commit()
+        
+            # info
+            #print f['title']
+        print "=========================="
     
     conn.close()
 
 
+def filter_mobile_url(url):
+    if 'm.detik.com' in url:
+        return True
+    return False
+
+
 def convert_time(t):
+    """Convert from time format to datetime format."""
     return datetime.fromtimestamp(mktime(t))
+
+
+def convert_pub_date(str_t):
+    """Convert from pubDate (RFC822) format to datetime format."""
+    return datetime.fromtimestamp(rfc822.mktime_tz(rfc822.parsedate_tz(str_t)))
 
 
 #@app.task

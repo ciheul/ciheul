@@ -29,11 +29,11 @@
 
 {% block container %}
   <div class="container" ng-app="jendela24App" ng-controller="NewsFeedCtrl">
-    <!--<pre class="news_title"></pre>-->
     <div class="news_overview">
-      <ul>
+      <h4>News Feed</h4>
+      <ul class="newsfeed">
         <li ng-repeat="news in newsfeed">
-          {[{ news.published_at }]} {[{ news.title }]}  
+        <a href="{[{ news.url }]}" target="_blank"><strong>{[{ news.title }]}</strong> <time class="timeago" datetime="{[{ news.published_at }]}">{[{ news.timeago }]}</time></a>
         </li>
       </ul> 
     </div>
@@ -42,19 +42,10 @@
 
 {% block javascript %}
   <script src="{% static "/static/js/libs/jquery-2.1.0.min.js" %}"></script>
+  <script src="{% static "/static/js/libs/jquery.timeago.js" %}"></script>
   <script src="{% static "/static/js/libs/angular.min.js" %}"></script>
   <script src="{% static "/static/js/libs/socket.io.min.js" %}"></script>
   <script src="{% static "/static/js/libs/bootstrap.min.js" %}"></script>
   <script src="{% static "/static/js/app/jendela24/controllers.js" %}"></script>
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var socket = io.connect("http://192.168.1.102/jendela24/news") 
-      socket.emit("subscribe");
-      socket.on("news_via_socketio", function(data) {
-        $(".news_title").append(data);
-      });
-    });
-  </script>
+  <script src="{% static "/static/js/app/jendela24/services.js" %}"></script>
 {% endblock %}
-
