@@ -226,8 +226,8 @@ CELERY_RESULT_BACKEND = 'redis://'
 CELERYBEAT_SCHEDULE = {
     'fetch-rss-every-10-minutes': {
         'task': 'jendela24.celery.fetch_rss',
-        #'schedule': timedelta(minutes=10),
-        'schedule': timedelta(minutes=1),
-        #'schedule': timedelta(seconds=30),
+        'schedule': timedelta(minutes=5),
+        #'schedule': timedelta(minutes=1),
+        'schedule': timedelta(seconds=30),
     },        
 }

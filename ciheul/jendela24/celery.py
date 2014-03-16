@@ -10,6 +10,7 @@ import feedparser
 import psycopg2
 import rfc822
 import pickle
+import json
 
 
 # set the default Django settings module for the 'celery' program
@@ -69,7 +70,7 @@ def fetch_rss():
                     WHERE NOT EXISTS (
                         SELECT 1 FROM jendela24_rssnews 
                             WHERE title=%s OR url=%s)
-                    RETURNING title, source, published_at
+                    RETURNING title, source, published_at, url
             """
         
             # insert rss news to database
@@ -78,10 +79,16 @@ def fetch_rss():
                     datetime.now(), convert_pub_date(f['published']), 
                     f['title'], f['link']))
 
-            # return a tuple of (id, title, source, published_at)
+            # return a tuple of (title, source, published_at, url)
             row = cursor.fetchone()
             if not row is None:
-                inserted_news.append(row)
+                modified_row = {
+                    'title': row[0].strip(), 
+                    'source': row[1].strip(),
+                    'published_at': row[2].isoformat(),
+                    'url': row[3],
+                }
+                inserted_news.append(modified_row)
 
             conn.commit()
 
@@ -92,23 +99,28 @@ def fetch_rss():
     
     conn.close()
 
-    print len(all_inserted_news)
-    call_news_publisher.delay(all_inserted_news)
+    print "Total latest news:", len(all_inserted_news)
+    print all_inserted_news
+    redis.publish("realtime_news", pickle.dumps(all_inserted_news))
+    #call_news_publisher.delay(pickle.dumps(all_inserted_news))
 
 
-@app.task
-def call_news_publisher(latest_news):
-    redis.publish("realtime_news", pickle.dumps('init'))
-    time.sleep(3)
-    for news in latest_news:
-        message = {
-            'title': news[0].strip(), 
-            'source': news[1].strip(), 
-            'published_at': news[2].isoformat()
-        }
-        print message
-        redis.publish("realtime_news", pickle.dumps(message))
-        time.sleep(1)
+#@app.task
+#def call_news_publisher(latest_news):
+#    print latest_news 
+#    redis.publish("realtime_news", pickle.dumps('init'))
+#    redis.publish("realtime_news", latest_news)
+#    #time.sleep(3)
+#    #for news in latest_news:
+#    #    message = {
+#    #        'title': news[0].strip(), 
+#    #        'source': news[1].strip(), 
+#    #        'published_at': news[2].isoformat(),
+#    #        'url': news[3],
+#    #    }
+#    #    print message
+#    #    redis.publish("realtime_news", pickle.dumps(message))
+#    #    #time.sleep(1)
 
 
 def convert_time(t):

@@ -6,6 +6,7 @@ from socketio.namespace import BaseNamespace
 from redis import StrictRedis
 from .celery import publish_news
 import time
+import json
 import pickle
 
 redis = StrictRedis('localhost')
@@ -57,14 +58,15 @@ class NewsNamespace(BaseNamespace):
     def listen_realtime_news(self):
         print "listen realtime news"
         self.sub.subscribe("realtime_news")
-        while True:
-            print 'listening...'
-            for news in self.sub.listen():
-                if news['type'] == 'message':
-                    x = pickle.loads(news['data'])
-                    if x == 'init': continue
-                    print x
-                    self.emit('news_via_socketio', x['title'], x['source'], x['published_at'])
+
+        print 'listening...'
+
+        for news in self.sub.listen():
+            if news['type'] == 'message':
+                message = pickle.loads(news['data'])
+                if message == 'init': continue
+                print message
+                self.emit('news_via_socketio', json.dumps(message))
 
     def listen(self):
         print "listen"
