@@ -13,10 +13,3 @@ class RssNewsResource(MainResource, ModelResource):
         include_resource_uri = False
         excludes = ['id']
         authorization = Authorization()
-
-    def dehydrate(self, bundle):
-        #bundle.data['summary'].replace('src', 'ng-src')
-        print bundle.data['summary']
-        print
-
-        return bundle

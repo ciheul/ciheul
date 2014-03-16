@@ -3,7 +3,7 @@ body {
 }
 
 .news_overview {
-    width: 640px;
+    //width: 640px;
 }
 
 h4 {
@@ -15,10 +15,13 @@ ul.newsfeed {
 }
 
 ul.newsfeed li {
+    //vertical-align: middle;
     border-top: 1px solid #ccc;
     padding: 0.4em 0 0.4em 1.1em; 
     list-style: none;
     font-size: 0.9em;
+    //background-color: green;
+    width: 100%;
 }
 
 ul.newsfeed li:hover {
@@ -35,7 +38,28 @@ ul.newsfeed li a:hover {
     color: #0074cc;
 }
 
-ul.newsfeed li a time {
+ul.newsfeed li a:visited, ul.newsfeed li a:visited .source, ul.newsfeed li a:visited time {
+    color: #ccc;
+}
+
+ul.newsfeed li a .source {
+    float: left;
+    display: inline-block;
+    width: 15%;
     color: #434343;
-    padding-left: 0.5em;
+    //background-color: red;
+}
+
+ul.newsfeed li a .title {
+    float: left;
+    width: 80%;
+    //background-color: blue;
+}
+
+ul.newsfeed li a .timeago {
+    color: #434343;
+    //background-color: yellow;
+    width: 100%;
+    text-align: right;
+    //float: right;
 }

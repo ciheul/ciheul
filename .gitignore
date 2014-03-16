@@ -1,4 +1,5 @@
 ~
+
 *.db
 *.rdb
 *.pyc
@@ -10,3 +11,4 @@ config.py
 send_post.txt
 ciheul/static/img/
 ciheul/bigpath/migrations/
+ciheul/jendela24/migrations/

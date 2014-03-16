@@ -227,7 +227,7 @@ CELERYBEAT_SCHEDULE = {
     'fetch-rss-every-10-minutes': {
         'task': 'jendela24.celery.fetch_rss',
         #'schedule': timedelta(minutes=10),
-        #'schedule': timedelta(minutes=1),
-        'schedule': timedelta(seconds=15),
+        'schedule': timedelta(minutes=1),
+        #'schedule': timedelta(seconds=30),
     },        
 }
