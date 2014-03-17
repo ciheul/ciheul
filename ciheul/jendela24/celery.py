@@ -74,13 +74,14 @@ def fetch_rss():
             """
         
             # insert rss news to database
-            cursor.execute(insert_string, 
-                    (source, f['title'], f['link'], f['summary'], 
-                    datetime.now(), convert_pub_date(f['published']), 
-                    f['title'], f['link']))
+            #cursor.execute(insert_string, 
+            #        (source, f['title'], f['link'], f['summary'], 
+            #        datetime.now(), convert_pub_date(f['published']), 
+            #        f['title'], f['link']))
 
             # return a tuple of (title, source, published_at, url)
-            row = cursor.fetchone()
+            #row = cursor.fetchone()
+            row = (f['title'], source, convert_pub_date(f['published']), f['link'])
             if not row is None:
                 modified_row = {
                     'title': row[0].strip(), 

@@ -1,16 +1,24 @@
 // socket.io
 $(document).ready(function() {
   var socket = io.connect("http://localhost/jendela24/news");
+  // subscribe to server
   socket.emit("subscribe", {data: "hello"});
+  
+  // always listening if there is any update news
   socket.on("news_via_socketio", function(json_news) {
-    console.log(json_news); 
+    // parse JSON
     var realtime_news = jQuery.parseJSON(json_news);
-    console.log(realtime_news.length);
-    var li = '<li>';
-    li += '  <a href="#">' + realtime_news.length + " update news";
-    li += '  </a></li>';
+    
+    // add the number of latest news to newsfeed
+    var li = '<li><a href="">' + realtime_news.length + ' update news</a></li>';
     $(".realtime-newsfeed").append(li);
-    $(".realtime-newsfeed").addEventListener('click', function() {
+
+    // add the number of latest news to 'title' tag
+    document.title = "(" + realtime_news.length + ") Jendela24";
+
+    // attach event that when user clicks, it shows up all latest news
+    // immediately
+    $(".realtime-newsfeed li a").click(function(e) {
       for (var i = 0; i < realtime_news.length; i++) {
         var li = '<li>';
         li += '  <a href="' + realtime_news[i].url + '" target="_blank">';
@@ -20,16 +28,14 @@ $(document).ready(function() {
         li += '  </a></li>';
         $(".realtime-newsfeed").append(li);
       }
-    }, false);
-  });
+      // ensure appended news does not disappear
+      e.preventDefault();
 
-  //socket.on("news_via_socketio", function(title, source, published_at, url) {
-  //  var li = '<li>';
-  //  li += '  <a href="' + url + '" target="_blank">';
-  //  li += '    <div class="source">' + source + '</div>';
-  //  li += '    <div class="title">' + title + '</div>';
-  //  li += '    <div class="timeago"><time class="timeago" datetime="' + published_at + '">' + jQuery.timeago(published_at) + '</time></div>';
-  //  li += '  </a></li>';
-  //  $(".realtime-newsfeed").append(li);
-  //});
+      // set the original title back
+      document.title = "Jendela24";
+
+      // remove the number of latest news from newsfeed
+      $(".realtime-newsfeed li").first().remove();
+    });
+  });
 });

@@ -4,6 +4,7 @@
 *.rdb
 *.pyc
 *.swp
+*.rss
 .DS_STORE
 .ropeproject
 ciheul.db
