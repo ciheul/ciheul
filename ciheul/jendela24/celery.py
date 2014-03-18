@@ -11,6 +11,7 @@ import psycopg2
 import rfc822
 import pickle
 import json
+#import urllib2
 
 
 # set the default Django settings module for the 'celery' program
@@ -46,6 +47,12 @@ def fetch_rss():
     cursor = conn.cursor()
     print "Connected to database!\n"
     
+    #proxy = urllib2.ProxyHandler({'http': 'http://wa232:jendela@cache.itb.ac.id:8080'})
+    #auth = urllib2.HTTPBasicAuthHandler()
+    #opener = urllib2.build_opener(proxy, auth, urllib2.HTTPHandler)
+    #urllib2.install_opener(opener)
+    #opener
+
     all_inserted_news = list()
     rss_list = open('ciheul/jendela24/rss_list.txt', 'r')
     for line in rss_list:
@@ -74,14 +81,14 @@ def fetch_rss():
             """
         
             # insert rss news to database
-            #cursor.execute(insert_string, 
-            #        (source, f['title'], f['link'], f['summary'], 
-            #        datetime.now(), convert_pub_date(f['published']), 
-            #        f['title'], f['link']))
+            cursor.execute(insert_string, 
+                    (source, f['title'], f['link'], f['summary'], 
+                    datetime.now(), convert_pub_date(f['published']), 
+                    f['title'], f['link']))
 
             # return a tuple of (title, source, published_at, url)
-            #row = cursor.fetchone()
-            row = (f['title'], source, convert_pub_date(f['published']), f['link'])
+            row = cursor.fetchone()
+            #row = (f['title'], source, convert_pub_date(f['published']), f['link'])
             if not row is None:
                 modified_row = {
                     'title': row[0].strip(), 
@@ -103,25 +110,6 @@ def fetch_rss():
     print "Total latest news:", len(all_inserted_news)
     print all_inserted_news
     redis.publish("realtime_news", pickle.dumps(all_inserted_news))
-    #call_news_publisher.delay(pickle.dumps(all_inserted_news))
-
-
-#@app.task
-#def call_news_publisher(latest_news):
-#    print latest_news 
-#    redis.publish("realtime_news", pickle.dumps('init'))
-#    redis.publish("realtime_news", latest_news)
-#    #time.sleep(3)
-#    #for news in latest_news:
-#    #    message = {
-#    #        'title': news[0].strip(), 
-#    #        'source': news[1].strip(), 
-#    #        'published_at': news[2].isoformat(),
-#    #        'url': news[3],
-#    #    }
-#    #    print message
-#    #    redis.publish("realtime_news", pickle.dumps(message))
-#    #    #time.sleep(1)
 
 
 def convert_time(t):
@@ -132,20 +120,3 @@ def convert_time(t):
 def convert_pub_date(str_t):
     """Convert from pubDate (RFC822) format to datetime format."""
     return datetime.fromtimestamp(rfc822.mktime_tz(rfc822.parsedate_tz(str_t)))
-
-
-#@app.task
-#def fetch_rss():
-#    #rss_url = 'http://rss.kontan.co.id/v2/investasi'
-#    #rss = feedparser.parse(rss_url)
-#    #rss = ['xxx', 'yyy', 'zzz']
-#    #k = 1
-#    #v = 'hello'
-#    for r in rss:
-#       redis.rpush('kontan', r)
-#    #    redis.zadd()
-#    #rss = {'x': 1}
-#    print k, v 
-#    #return k, v
-
-

@@ -1,5 +1,6 @@
 from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
+from tastypie.paginator import Paginator
 from ciheul.common import MainResource, b64save_images
 from jendela24 import models
 
@@ -13,3 +14,4 @@ class RssNewsResource(MainResource, ModelResource):
         include_resource_uri = False
         excludes = ['id']
         authorization = Authorization()
+        #paginator_class = Paginator

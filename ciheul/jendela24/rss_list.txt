@@ -1,13 +1,13 @@
-#http://rss.kontan.co.id/v2/all,Kontan
-#http://rss.kontan.co.id/v2/investasi,Kontan
-#http://www.pikiran-rakyat.com/feed/bandung-raya,Pikiran Rakyat
-#http://www.radarcirebon.com/category/lintas-berita/kota-cirebon/feed,Radar Cirebon
+http://rss.kontan.co.id/v2/all,Kontan
+http://rss.kontan.co.id/v2/investasi,Kontan
+http://www.pikiran-rakyat.com/feed/bandung-raya,Pikiran Rakyat
+http://www.radarcirebon.com/category/lintas-berita/kota-cirebon/feed,Radar Cirebon
 #http://swa.co.id/feed,SWA.co.id
-#http://rss.viva.co.id/get/all,VivaNews
-#http://rss.detik.com/,Detik
+http://rss.viva.co.id/get/all,VivaNews
+http://rss.detik.com/,Detik
 #http://rss.detik.com/index.php/finance,DetikFinance
 #http://www.trenologi.com/feed/,Trenologi
 #http://feeds.feedburner.com/dsnet?format=xml,DailySocial
 #http://www.merdeka.com/feed/,Merdeka
 #ciheul/jendela24/detik.rss,Detik
-ciheul/jendela24/viva.rss,VivaNews
+#ciheul/jendela24/viva.rss,VivaNews

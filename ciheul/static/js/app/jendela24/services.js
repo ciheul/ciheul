@@ -1,6 +1,33 @@
+'use strict';
+
+/* Services */
+
+var ip_address = "167.205.65.43";
+var jendela24Services = angular.module('jendela24Services', ['ngResource']);
+
+jendela24Services.factory('News', ['$resource', 
+    function($resource) {
+      //return $resource('http://localhost/jendela24/1.0/news/?limit=10', {}, {
+      return $resource('http://' + ip_address + '/jendela24/1.0/news/?limit=30', {}, {
+          query: {
+            method: 'GET', 
+            isArray: true,
+            transformResponse: function(data_json, header) {
+              var data = angular.fromJson(data_json);
+              for (var i = 0; i < data.length; i++ ) {
+                data[i].timeago = jQuery.timeago(data[i].published_at);
+              }
+              return data;
+            }   
+          }
+      });    
+    }
+]);
+
 // socket.io
 $(document).ready(function() {
-  var socket = io.connect("http://localhost/jendela24/news");
+  var socket = io.connect('http://' + ip_address + '/jendela24/news');
+  //var socket = io.connect("http://localhost/jendela24/news");
   // subscribe to server
   socket.emit("subscribe", {data: "hello"});
   
@@ -38,4 +65,15 @@ $(document).ready(function() {
       $(".realtime-newsfeed li").first().remove();
     });
   });
+
+  //$(window).scroll(function() {
+  //  if ($(window).scrollTop() + $(window).height() > $(document).height() - 200) {
+  //    console.log("bottom!");
+  //    if ($(".spinning").children().length === 0) {
+  //      console.log("spinning!");
+  //      var img = '<img src="/static/img/common/spin-white.gif">';
+  //      $(".spinning").append(img);
+  //    }
+  //  }
+  //});
 });
