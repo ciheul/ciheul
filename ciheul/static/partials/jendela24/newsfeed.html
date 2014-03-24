@@ -1,15 +1,16 @@
-
-    <div class="news_overview">
-      <h4>Lini Masa</h4>
-      <ul class="realtime-newsfeed"></ul>
-      <ul class="newsfeed">
-        <li ng-repeat="news in newsfeed | filter:query">
-        <a href="{[{ news.url }]}" target="_blank">
-            <div class="source">{[{ news.source }]}</div>
-            <div class="title">{[{ news.title }]}</div>
-            <div class="timeago"><time class="timeago" datetime="{[{ news.published_at }]}">{[{ news.timeago }]}</time></div>
-        </a>
-        </li>
-      </ul> 
-      <div class="spinning"></div>
-    </div>
+<div class="news_overview">
+  <h4>Lini Masa</h4>
+  <ul class="realtime-newsfeed"></ul>
+  <ul class="newsfeed">
+    <li ng-repeat="news in newsfeed | filter:query">
+      <a href="{[{ news.url }]}" target="_blank">
+        <div class="source">{[{ news.source }]}</div>
+        <div class="title">{[{ news.title }]}</div>
+        <div class="timeago">
+          <time class="timeago" datetime="{[{ news.published_at }]}">{[{ news.timeago }]}</time>
+        </div>
+      </a>
+    </li>
+  </ul> 
+  <ul class="spinning"></ul>
+</div>

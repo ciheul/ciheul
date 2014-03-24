@@ -6,10 +6,12 @@ from jendela24 import models
 
 
 class RssNewsResource(MainResource, ModelResource):
+#class RssNewsResource(ModelResource):
     """Resource: /jendela24/1.0/news/"""
 
     class Meta:
-        queryset = models.RssNews.objects.order_by('published_at').reverse()
+        queryset = models.RssNews.objects.all().order_by('published_at').reverse()
+        #queryset = models.RssNews.objects.all()
         resource_name = 'news'
         include_resource_uri = False
         excludes = ['id']

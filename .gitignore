@@ -1,6 +1,7 @@
 ~
 
 *.db
+*.dump
 *.rdb
 *.pyc
 *.swp

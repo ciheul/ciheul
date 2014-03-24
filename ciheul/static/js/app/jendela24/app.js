@@ -5,13 +5,13 @@
 var jendela24App = angular.module('jendela24App', [
   'ngRoute', 
   'jendela24Controllers', 
+  'jendela24Directives',
   'jendela24Services'
 ]);
 
 jendela24App.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');
-
 });
 
 jendela24App.config(['$routeProvider', 
@@ -21,8 +21,5 @@ jendela24App.config(['$routeProvider',
         controller: 'NewsFeedCtrl',
         templateUrl: '/static/partials/jendela24/newsfeed.html'
       });
-//      otherwise({
-//        redirectTo: '/'
-//      });
   }
 ]);

@@ -9,7 +9,6 @@ from time import mktime
 import feedparser
 import psycopg2
 import rfc822
-import pickle
 import json
 #import urllib2
 
@@ -67,7 +66,7 @@ def fetch_rss():
 
         inserted_news = list()
         for f in feed['entries']:
-            print f['link']
+            #print f['link']
 
             # sql insert. only unique news is inserted. not Django-way
             insert_string = """
@@ -100,7 +99,7 @@ def fetch_rss():
 
             conn.commit()
 
-        print "Number of inserted news:", len(inserted_news)
+        print len(inserted_news)
         print "=========================="
 
         all_inserted_news += inserted_news
@@ -108,8 +107,8 @@ def fetch_rss():
     conn.close()
 
     print "Total latest news:", len(all_inserted_news)
-    print all_inserted_news
-    redis.publish("realtime_news", pickle.dumps(all_inserted_news))
+    #print all_inserted_news
+    redis.publish("realtime_news", json.dumps(all_inserted_news))
 
 
 def convert_time(t):

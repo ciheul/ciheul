@@ -93,3 +93,7 @@ ul.realtime-newsfeed li a .timeago {
     font-weight: bold;
     text-align: right;
 }
+
+.spinning {
+//    overflow: auto;
+}
