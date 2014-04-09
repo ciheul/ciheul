@@ -12,6 +12,7 @@ TEMPLATE_DEBUG = DEBUG
 
 # add project path to python path
 DJANGO_ROOT = os.path.realpath('')
+#ANGULAR_SEED_ROOT = os.path.join(DJANGO_ROOT, '../angular-seed')
 PROJECT_PATH = os.path.join(DJANGO_ROOT, 'ciheul')
 sys.path += [PROJECT_PATH]
 
@@ -25,7 +26,10 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-IP_ADDR = socket.gethostbyname(socket.gethostname())
+#try:
+#    IP_ADDR = socket.gethostbyname(socket.gethostname())
+#except socket.gaierror:
+#    print "Error: Django setting for assigning IP Address."
 
 DATABASES = {
     'default': {
@@ -88,6 +92,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    #os.path.join(DJANGO_ROOT, '../angular-seed'),
     #os.path.join(DJANGO_ROOT, 'ciheul/static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
@@ -120,6 +125,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
 
 ROOT_URLCONF = 'ciheul.urls'
@@ -130,6 +136,8 @@ WSGI_APPLICATION = 'ciheul.wsgi.application'
 TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_PATH, 'templates'),
+    #os.path.join(DJANGO_ROOT, '../angular-seed/jendela24' ),
+    os.path.join(DJANGO_ROOT, '../angular-seed' ),
 )
 
 INSTALLED_APPS = (
@@ -144,7 +152,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     #'bootstrap_toolkit',
+
     # ciheul apps
+    'accounts',
     'ciheul',
     'bigear',
     'bigdrive',
@@ -153,10 +163,16 @@ INSTALLED_APPS = (
     'juara',
     'jendela24',
     'south',
+
     # third plugin
     'tastypie',
-    'social_auth',
-    'registration',
+    'social.apps.django_app.default',
+    'corsheaders',
+    'provider',
+    'provider.oauth2',
+
+    # unused
+    #'registration',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -192,33 +208,36 @@ APPEND_SLASH = False
 
 # django-tastypie
 TASTYPIE_DEFAULT_FORMATS = ['json']
-
-# django-social-auth
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/dirban/members/'
-LOGIN_ERROR_URL = '/login-error/'
+TASTYPIE_ALLOW_MISSING_SLASH = True
 
 AUTHENTICATION_BACKENDS = {
-    'social_auth.backends.twitter.TwitterBackend',
+    'social.backends.twitter.TwitterOAuth',
     'django.contrib.auth.backends.ModelBackend',
 }
 
 TEMPLATE_CONTEXT_PROCESSORS = {
-    'social_auth.context_processors.social_auth_by_type_backends',
     'django.contrib.auth.context_processors.auth',
+    'social.apps.django_app.context_processors.backends',
 }
 
-SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
-SOCIAL_AUTH_UID_LENGTH = 16
-SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
-SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 16
-SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 16
-SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+# python-social-auth
+SOCIAL_AUTH_LOGIN_URL = '/login/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/login/redirect/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login/error/'
 
-SOCIAL_AUTH_ENABLED_BACKENDS = {'twitter'}
+#SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+#SOCIAL_AUTH_UID_LENGTH = 16
+#SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+#SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 16
+#SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 16
+#SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+#
+#SOCIAL_AUTH_ENABLED_BACKENDS = {'twitter'}
 
-TWITTER_CONSUMER_KEY = config.CONSUMER_KEY
-TWITTER_CONSUMER_SECRET = config.CONSUMER_SECRET
+#TWITTER_CONSUMER_KEY = config.CONSUMER_KEY
+#TWITTER_CONSUMER_SECRET = config.CONSUMER_SECRET
+SOCIAL_AUTH_TWITTER_KEY = config.CONSUMER_KEY
+SOCIAL_AUTH_TWITTER_SECRET = config.CONSUMER_SECRET
 
 BROKER_URL='amqp://'
 CELERY_RESULT_BACKEND = 'redis://'
@@ -231,3 +250,16 @@ CELERYBEAT_SCHEDULE = {
         #'schedule': timedelta(seconds=15),
     },        
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = {
+        'localhost',
+        'localhost:8001',
+        'localhost:8002',
+        '127.0.0.1:8001',
+        '127.0.0.1:8002',
+        '192.168.1.103:8002',
+        '167.205.65.12:8001',
+}
+
+CORS_ALLOW_CREDENTIALS = True

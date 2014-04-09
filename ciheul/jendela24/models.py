@@ -8,3 +8,7 @@ class RssNews(models.Model):
     summary = models.TextField()
     created_at = models.DateTimeField(auto_now=True, auto_now_add=True)
     published_at = models.DateTimeField()
+
+
+class User(models.Model):
+    pass

@@ -47,7 +47,7 @@ ul.realtime-newsfeed li a:visited time,
 ul.newsfeed li a:visited,
 ul.newsfeed li a:visited .source, 
 ul.newsfeed li a:visited time {
-    color: #ccc;
+    //color: #ccc;
 }
 
 ul.newsfeed li a .source {

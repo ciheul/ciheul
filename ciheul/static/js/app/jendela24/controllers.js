@@ -4,14 +4,15 @@
 
 var jendela24Controllers = angular.module('jendela24Controllers', ['ui.bootstrap']);
 
-jendela24Controllers.controller('NewsFeedCtrl', ['$scope', 'News',
-  function($scope, News) {
-    var limit = 40;
+jendela24Controllers.controller('NewsFeedCtrl', ['$scope', '$modal', 'News',
+  function($scope, $modal, News) {
+    var limit = 20;
     $scope.newsfeed = News.query({offset: 0, limit: limit});
 
     var counter = limit;
     $(window).scroll(function() {
-      if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+      //if ($(window).scrollTop() + $(window).height() > $(document).height() - 10) {
+      if ($(window).scrollTop() + $(window).height() == $(document).height()) {
         console.log("bottom!");
         if ($(".spinning").children().length === 0) {
           console.log("spinning!");
@@ -20,18 +21,19 @@ jendela24Controllers.controller('NewsFeedCtrl', ['$scope', 'News',
 
           News.query({offset: counter, limit: limit}, 
             function success(result) {
-              console.log(counter);
-              //$scope.newsfeed.push($scope.newsfeed, result);
               for (var i = 0; i < result.length; i++) {      
-                console.log(result[i]);
-                var li = '<li>';
-                li += '  <a href="' + result[i].url + '" target="_blank">';
-                li += '    <div class="source">' + result[i].source + '</div>';
-                li += '    <div class="title">' + result[i].title + '</div>';
-                li += '    <div class="timeago"><time class="timeago" datetime="' + result[i].published_at + '">' + jQuery.timeago(result[i].published_at) + '</time></div>';
-                li += '  </a></li>';
+                //var li = generateElementLi(result[i].url, result[i].source, 
+                //  result[i].title, result[i].published_at);
+                var li  = '<li class="news" ng-click="showDetailNews()"><a href="' + result[i].url + '" target="_blank">';
+                    li += '  <div class="source">' + result[i].source + '</div>';
+                    li += '  <div class="title">' + result[i].title + '</div>';
+                    li += '  <div class="timeago"><time class="timeago" datetime="' + result[i].published_at + '">' + jQuery.timeago(result[i].published_at) + '</time></div>';
+                    li += '</a></li>';
                 $(".newsfeed").append(li);
               }
+              $(".news").click(function() {
+                $scope.showDetailNews();
+              });
               $(".spinning").remove();
             }
           );
@@ -39,8 +41,40 @@ jendela24Controllers.controller('NewsFeedCtrl', ['$scope', 'News',
         }
       }
     });
+
+    $scope.showDetailNews = function() {
+      var summary = $(this)[0].news.summary;
+      var title = $(this)[0].news.title;
+      var modalDetailNews = $modal.open({
+        templateUrl: '/static/partials/jendela24/detail_news_modal.html',
+        controller: ModalDetailNewsCtrl,
+        resolve: {
+          title: function() {return title;},
+          summary: function() {return summary;}
+        }
+      });
+      
+    };
   }]
 );
+
+var ModalDetailNewsCtrl = function($scope, $modalInstance, title, summary) {
+  $scope.title = title;
+  $scope.summary = summary;
+
+  $scope.cancel = function() {
+    $modalInstance.dismiss('cancel');
+  };
+  console.log(summary);
+};
+//function generateElementLi(url, source, title, published_at) {
+//  var li  = '<li class="news" ng-click="showDetailNews()"><a href="' + url + '" target="_blank">';
+//      li += '  <div class="source">' + source + '</div>';
+//      li += '  <div class="title">' + title + '</div>';
+//      li += '  <div class="timeago"><time class="timeago" datetime="' + published_at + '">' + jQuery.timeago(published_at) + '</time></div>';
+//      li += '</a></li>';
+//  return li;
+//}
 
 jendela24Controllers.controller('ModalDemoCtrl', ['$scope', '$modal', '$log',
   function($scope, $modal, $log) {
@@ -66,7 +100,7 @@ jendela24Controllers.controller('ModalDemoCtrl', ['$scope', '$modal', '$log',
   }]
 );
 
-var ModalInstanceCtrl = function($scope, $modalInstance, items) {
+var ModalInstanceCtrl = function($scope, $http, $modalInstance, items) {
   $scope.items = items;
   
   $scope.selected = {
@@ -80,6 +114,31 @@ var ModalInstanceCtrl = function($scope, $modalInstance, items) {
   $scope.cancel = function() {
     $modalInstance.dismiss('cancel');
   };
+
+  $scope.login_twitter = function() {
+    $http({
+      method: 'POST', 
+      url: 'https://api.twitter.com/oauth/request_token',
+      config: {
+        headers: {
+          'oauth_callback': 'http://localhost:8000/jendela24/login/redirect',
+          'oauth_consumer_key': 'kGRMC2Y3RyGde0fsP3s9pg',
+          'oauth_signature_method': 'HMAC-SHA1',
+          'oauth_version': '1.0',
+          'Access-Control-Allow-Origin': 'https://api.twitter.com'
+        }
+      },
+    }).success(function(data) {
+        console.log("success");
+      }).
+      error(function(data, status, header, config) {
+        console.log("error" + status);
+        console.log(header);
+        console.log(config);
+      });
+  };
+
+
 };
 
 

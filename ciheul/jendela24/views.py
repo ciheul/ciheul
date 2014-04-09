@@ -1,27 +1,60 @@
-from celery import Celery
+from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse
 from socketio import socketio_manage
 from socketio.namespace import BaseNamespace
+from social.backends.twitter import TwitterOAuth
 from redis import StrictRedis
+from celery import Celery
 from .celery import publish_news
 import time
 import json
+import os.path
 
 
 redis = StrictRedis('localhost')
 
 
+def show_color(request):
+    if 'favorite_color' in request.COOKIES:
+        return HttpResponse("Your favorite color is %s" % \
+            request.COOKIES["favorite_color"])
+    return HttpResponse("You don't have a favorite color.")
+
+
+def set_color(request):
+    if 'favorite_color' in request.GET:
+        response = HttpResponse("Your favorite color is now %s" % \
+            request.GET['favorite_color'])
+        response.set_cookie('favorite_color', request.GET['favorite_color'])
+        return response
+    else:
+        return HttpResponse("You didn't give a favorite color.")
+
+
+def about(request):
+    if request.session.test_cookie_worked():
+        #request.session.delete_test_cookie()
+        return HttpResponse("the test cookie works!")
+    return HttpResponse("cookie fails.")
+
+
 def home(request):
+    print "home"
+    #if getattr(request.session['username'], None):
+    try:
+        username = request.session['username']
+        print 'jendela24. username:', username
+    except KeyError:
+        username = 'guest'
+        print "no username in session"
+
     context = {
         'title': 'Jendela24',
-        'app_css': 'jendela24.css',
+        'twitter_id': getattr(settings, 'SOCIAL_AUTH_TWITTER_KEY', None),
+        'username': username
     }
-    q = request.GET.get('q', '')
-    if q:
-        print 'q:', q
-        publish_news.delay()
-    return render(request, "jendela24/base_jendela24.html", context)
+    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/jendela24/index.html'), context)
 
 
 def socketio(request):

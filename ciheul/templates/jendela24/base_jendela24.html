@@ -16,11 +16,37 @@
 </head>
 
 <body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="">{{ title }}</a>
+        <form class="navbar-search pull-left" style="float:right;padding-right:5px;">
+          <input type="text" class="search-query input-medium" size="10" placeholder="Cari" ng-model="query">
+        </form>
+        <div class="nav-collapse collapse" ng-controller="ModalDemoCtrl">
+          <ul class="nav">
+            <li><a href="#" ng-click="open()">Masuk/Daftar</a></li>
+          </ul>
+        </div><!-- /.nav-collapse -->
+      </div>
+    </div>
+  </div>
+
 <div id="fb-root"></div>
+<div id="fb-logout">
+  <button type="button" class="logout">Logout</button>
+</div>
+<button type="button" class="query_api">Query</button>
+
 <script>
   window.fbAsyncInit = function() {
   FB.init({
-    appId      : '{your-app-id}',
+    appId      : '398345650302785',
     status     : true, // check login status
     cookie     : true, // enable cookies to allow the server to access the session
     xfbml      : true  // parse XFBML
@@ -37,6 +63,7 @@
       // login status of the person. In this case, we're handling the situation where they 
       // have logged in to the app.
       testAPI();
+      $('#fb-logout').show();
     } else if (response.status === 'not_authorized') {
       // In this case, the person is logged into Facebook, but not into the app, so we call
       // FB.login() to prompt them to do so. 
@@ -61,7 +88,8 @@
   (function(d){
    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
    if (d.getElementById(id)) {return;}
-   js = d.createElement('script'); js.id = id; js.async = true;
+   js = d.createElement('script'); 
+   js.id = id; js.async = true;
    js.src = "//connect.facebook.net/en_US/all.js";
    ref.parentNode.insertBefore(js, ref);
   }(document));
@@ -72,6 +100,7 @@
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
       console.log('Good to see you, ' + response.name + '.');
+      console.log(response);
     });
   }
 </script>
@@ -81,27 +110,17 @@
   present a graphical Login button that triggers the FB.login() function when clicked. -->
 
 <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
-  <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
-      <div class="container">
-        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="brand" href="">{{ title }}</a>
-        <form class="navbar-search pull-left" style="float:right;padding-right:5px;">
-          <input type="text" class="search-query input-medium" size="10" placeholder="Cari" ng-model="query">
-        </form>
-        <div class="nav-collapse collapse" ng-controller="ModalDemoCtrl">
-          <ul class="nav">
-            <li><a href="#" ng-click="open()">Masuk/Daftar</a></li>
-            <!--<li><a href="{% url 'socialauth_begin' 'twitter' %}">Masuk</a></li>-->
-          </ul>
-        </div><!-- /.nav-collapse -->
-      </div>
-    </div>
-  </div>
+
+
+
+  {% if twitter_id %}
+  <form id="twitter" method="post" action="https://api.twitter.com/oauth/request_token">{% csrf_token %}
+    <input id="at" type="hidden" name="access_token" value="" />
+    <input id="code" type="hidden" name="code" value="" />
+
+
+  </form>
+  {% endif %}
 
   <div class="container" ng-view></div>
 
@@ -117,6 +136,31 @@
   <script src="{% static "/static/js/app/jendela24/controllers.js" %}"></script>
   <script src="{% static "/static/js/app/jendela24/directives.js" %}"></script>
   <script src="{% static "/static/js/app/jendela24/services.js" %}"></script>
+
+<script>
+  $(document).ready(function() {
+    $('.logout').bind("click", function() {
+      FB.logout(function(response) {
+        console.log("fb logout");
+        console.log(response);
+        $('#fb-logout').hide();
+        location.reload();
+      });
+    });
+
+    (function hello() {
+      $('#fb-logout').hide();
+    }());
+  });
+
+  $('.query_api').bind("click", function() {
+    //FB.api('https://graph.facebook.com/1328635891/feed?access_token=CAAFqSxL770EBAOlYM6Fu7zaMh8TTiLj1MP2Yz7V7zNu5VtOnjVSr3VZAHBYOoMvRdZCGDjjAqMr9wHCbgtQ3Dt1lDBn4e9mW24hZBfzlh8gF0dxsqWwXnuw0XVZCQZB7rAMR6xOIGAegxwjr4fC5ZBuDq2iB9LqW2sa2eGJV9S3UarcZB8xxFGHFXAqdmszzNeNZBmXH6xbMowZDZD&until=1395274182', function(response) {
+    FB.api('/me/feed?limit=10', function(response) {
+      console.log(response);
+    });
+  });
+</script>
+
 </body>
 
 </html>

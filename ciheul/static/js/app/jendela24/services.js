@@ -2,7 +2,7 @@
 
 /* Services */
 
-var ip_address = "localhost";
+var ip_address = "localhost:8000";
 //var ip_address = "192.168.1.100";
 
 var jendela24Services = angular.module('jendela24Services', ['ngResource']);

@@ -51,3 +51,4 @@ w3lib==1.5
 wsgiref==0.1.2
 yolk==0.4.3
 zope.interface==4.1.0
+django-cors-headers==0.12
