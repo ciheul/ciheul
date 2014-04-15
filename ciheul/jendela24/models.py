@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class RssNews(models.Model):
@@ -8,7 +9,17 @@ class RssNews(models.Model):
     summary = models.TextField()
     created_at = models.DateTimeField(auto_now=True, auto_now_add=True)
     published_at = models.DateTimeField()
+    user = models.ManyToManyField(User, through='Activities')
+
+    def __unicode__(self):
+        return self.title
 
 
-class User(models.Model):
-    pass
+class Activities(models.Model):
+    user = models.ForeignKey(User)
+    article = models.ForeignKey(RssNews)
+    like = models.BooleanField()
+    share = models.BooleanField()
+
+    def __unicode__(self):
+        return u'%s -> %s' % (self.user.id, self.article.id)

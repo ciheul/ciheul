@@ -15,30 +15,6 @@ import os.path
 redis = StrictRedis('localhost')
 
 
-def show_color(request):
-    if 'favorite_color' in request.COOKIES:
-        return HttpResponse("Your favorite color is %s" % \
-            request.COOKIES["favorite_color"])
-    return HttpResponse("You don't have a favorite color.")
-
-
-def set_color(request):
-    if 'favorite_color' in request.GET:
-        response = HttpResponse("Your favorite color is now %s" % \
-            request.GET['favorite_color'])
-        response.set_cookie('favorite_color', request.GET['favorite_color'])
-        return response
-    else:
-        return HttpResponse("You didn't give a favorite color.")
-
-
-def about(request):
-    if request.session.test_cookie_worked():
-        #request.session.delete_test_cookie()
-        return HttpResponse("the test cookie works!")
-    return HttpResponse("cookie fails.")
-
-
 def home(request):
     print "home"
     #if getattr(request.session['username'], None):

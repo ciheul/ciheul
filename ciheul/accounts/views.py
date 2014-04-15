@@ -28,8 +28,9 @@ twitter = OAuth1Service(
 ip_address = 'http://192.168.1.103:8002/jendela24/'
 
 def login_twitter(request):
-    print "login_twitter"
+    print "accounts.login_twitter"
     if login_session(request):
+        print "login using session"
         #return HttpResponseRedirect('http://127.0.0.1:8002/accounts/profile')
         return HttpResponseRedirect(ip_address)
     
@@ -50,11 +51,10 @@ def login_twitter(request):
     
 
 def login_session(request):
-    print "login_session"
+    print "accounts.login_session"
     try:
         s = Session.objects.get(pk=request.COOKIES['sessionid'])
         user_info = s.get_decoded()
-
         return login_ciheul(request, user_info['username'], \
             user_info['password'])
     except ObjectDoesNotExist:
@@ -65,7 +65,7 @@ def login_session(request):
 
 
 def redirect(request):
-    print "redirect"
+    print "accounts.redirect"
     # TODO check if request is coming from twitter. otherwise, malicious attack
 
     sessionid = request.COOKIES['sessionid']
@@ -120,12 +120,12 @@ def redirect(request):
 
 
 def redirect_twitter(request):
-    print "redirect_twitter"
+    print "accounts.redirect_twitter"
     return HttpResponseRedirect('http://127.0.0.1:8002/accounts/profile')
 
 
 def login_form(request):
-    print "login_form"
+    print "accounts.login_form"
     if request.user.is_authenticated():
         return HttpResponseRedirect('http://127.0.0.1:8002/accounts/profile')
 
@@ -137,7 +137,7 @@ def login_form(request):
 
 
 def login_ciheul(request, username, password):
-    print "login_ciheul"
+    print "accounts.login_ciheul"
     user = auth.authenticate(username=username, password=password)
     if user is not None and user.is_active:
         auth.login(request, user)

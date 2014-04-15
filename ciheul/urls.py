@@ -9,7 +9,7 @@ from bigear.api import ReportResource
 from bigpath.api import ShelterResource, UserResource, ImageResource
 from dirban.api import BusinessResource
 from juara.api import AdministrativeResource
-from jendela24.api import RssNewsResource, UserResource
+from jendela24.api import RssNewsResource, UserResource, ActivitiesResource
 
 
 v1_api = Api(api_name='1.0')
@@ -22,6 +22,7 @@ v1_api.register(ImageResource())
 v1_jendela24_api = Api(api_name='1.0')
 v1_jendela24_api.register(RssNewsResource())
 v1_jendela24_api.register(UserResource())
+v1_jendela24_api.register(ActivitiesResource())
 
 v1_juara_api = Api(api_name='1.0')
 v1_juara_api.register(AdministrativeResource())
@@ -30,8 +31,6 @@ urlpatterns = patterns('',
     (r'^admin/?', include(admin.site.urls)),
     url(r'^socket\.io/', 'jendela24.views.socketio'),
     url(r'^jendela24/', include(v1_jendela24_api.urls)),
-    url(r'^jendela24/show_color$', 'jendela24.views.show_color'),
-    url(r'^jendela24/set_color$', 'jendela24.views.set_color'),
     url(r'^jendela24/$', 'jendela24.views.home'),
 
     url(r'^login/redirect', 'accounts.views.redirect_twitter'),
