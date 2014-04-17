@@ -1,3 +1,6 @@
+from django.contrib.sessions.models import Session
+from django.core.exceptions import ObjectDoesNotExist
+
 import commands
 import sys
 import base64
@@ -9,11 +12,25 @@ import uuid
 import settings
 
 
+
 class MainResource():
     def alter_list_data_to_serialize(self, request, data_dict):
         data_list = data_dict['objects']
         del(data_dict)
         return data_list
+
+
+def get_current_session(sessionid):
+    try:
+        s = Session.objects.get(pk=sessionid).get_decoded()
+        if s: 
+            return s
+        else:
+            return None
+    except ObjectDoesNotExist:
+        print "ObjectDoesNotExist"
+        # TODO learn how to use raise
+        return None
 
 
 def get_local_ip_address():

@@ -16,11 +16,9 @@ redis = StrictRedis('localhost')
 
 
 def home(request):
-    print "home"
     #if getattr(request.session['username'], None):
     try:
         username = request.session['username']
-        print 'jendela24. username:', username
     except KeyError:
         username = 'guest'
         print "no username in session"
