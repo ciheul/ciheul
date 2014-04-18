@@ -9,7 +9,7 @@ from bigear.api import ReportResource
 from bigpath.api import ShelterResource, UserResource, ImageResource
 from dirban.api import BusinessResource
 from juara.api import AdministrativeResource
-from jendela24.api import RssNewsResource, UserResource, ActivitiesResource
+from jendela24.api import RssNewsResource, UserResource, ActivitiesResource, UserProfileResource
 
 
 v1_api = Api(api_name='1.0')
@@ -22,6 +22,7 @@ v1_api.register(ImageResource())
 v1_jendela24_api = Api(api_name='1.0')
 v1_jendela24_api.register(RssNewsResource())
 v1_jendela24_api.register(UserResource())
+v1_jendela24_api.register(UserProfileResource())
 v1_jendela24_api.register(ActivitiesResource())
 
 v1_juara_api = Api(api_name='1.0')

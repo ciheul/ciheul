@@ -10,6 +10,8 @@ import feedparser
 import psycopg2
 import rfc822
 import json
+from boilerpipe.extract import Extractor
+import requests
 #import urllib2
 
 
@@ -66,23 +68,41 @@ def fetch_rss():
 
         inserted_news = list()
         for f in feed['entries']:
-            #print f['link']
+            # check whether there is no duplicate row
+            query_string = """
+                SELECT 1 FROM jendela24_rssnews WHERE title=%s OR url=%s
+            """
+            cursor.execute(query_string, (f['title'], f['link']))
+            rows = cursor.fetchall()
+            if rows:
+                continue
+
+            #print "debug"
+            #extractor = Extractor(extractor='ArticleExtractor', html=r.text)
+            #extractor = Extractor(extractor='ArticleExtractor', url=f['link'])
+            #print "debug"
+            #content = extractor.getText()
+
+            r = requests.get(f['link'])
+            if r.status_code != 200:
+                continue
+            content = r.text
 
             # sql insert. only unique news is inserted. not Django-way
             insert_string = """
                 INSERT INTO jendela24_rssnews 
-                    (source, title, url, summary, created_at, published_at)
-                    SELECT %s, %s, %s, %s, %s, %s
+                    (source, title, url, summary, created_at, published_at, content)
+                    SELECT %s, %s, %s, %s, %s, %s, %s
                     WHERE NOT EXISTS (
                         SELECT 1 FROM jendela24_rssnews 
                             WHERE title=%s OR url=%s)
-                    RETURNING title, source, published_at, url
+                    RETURNING title, source, published_at, url, content
             """
         
             # insert rss news to database
             cursor.execute(insert_string, 
                     (source, f['title'], f['link'], f['summary'], 
-                    datetime.now(), convert_pub_date(f['published']), 
+                    datetime.now(), convert_pub_date(f['published']), content, 
                     f['title'], f['link']))
 
             # return a tuple of (title, source, published_at, url)
@@ -94,6 +114,7 @@ def fetch_rss():
                     'source': row[1].strip(),
                     'published_at': row[2].isoformat(),
                     'url': row[3],
+                    'content': content,
                 }
                 inserted_news.append(modified_row)
 
@@ -109,6 +130,14 @@ def fetch_rss():
     print "Total latest news:", len(all_inserted_news)
     #print all_inserted_news
     redis.publish("realtime_news", json.dumps(all_inserted_news))
+
+
+
+
+@app.task
+def extract_rss(f):
+    pass
+
 
 
 def convert_time(t):

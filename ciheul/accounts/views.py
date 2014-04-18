@@ -1,12 +1,14 @@
+from ciheul.jendela24.models import UserProfile
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseGone 
 from django.shortcuts import redirect, render
 from rauth import OAuth1Service
+from requests.exceptions import ConnectionError
 import json
 import string
 import random
@@ -27,6 +29,7 @@ twitter = OAuth1Service(
 #ip_address = 'http://127.0.0.1:8002/jendela24'
 ip_address = 'http://192.168.1.103:8002/jendela24/'
 
+
 def login_twitter(request):
     print "accounts.login_twitter"
     if login_session(request):
@@ -34,11 +37,15 @@ def login_twitter(request):
         #return HttpResponseRedirect('http://127.0.0.1:8002/accounts/profile')
         return HttpResponseRedirect(ip_address)
     
-    # get request token and request token secret
-    print "get request_token from twitter api..."
-    request_token, request_token_secret = twitter.get_request_token()
-    print 'request_token:', request_token
-    print 'request_token_secret:', request_token_secret
+    try:
+        # get request token and request token secret
+        print "get request_token from twitter api..."
+        request_token, request_token_secret = twitter.get_request_token()
+        print 'request_token:', request_token
+        print 'request_token_secret:', request_token_secret
+    except ConnectionError:
+        print "[ERROR] Max retries exceeded to Twitter API."
+        return HttpResponseGone()
 
     request.session['request_token_secret'] = request_token_secret
 
@@ -89,13 +96,16 @@ def redirect(request):
 
     fullname = u[0]['user']['name']
     username = u[0]['user']['screen_name']
+    description = u[0]['user']['description']
+    location = u[0]['user']['location']
+    homepage = u[0]['user']['url']
+    profile_image_url = u[0]['user']['profile_image_url']
 
     try:
         # check if specified user exists in table auth.user
         user = User.objects.get(username=username)
         # TODO this is the worst way
         password = '!!rancakendal!!'
-        print 'password:', password
     except ObjectDoesNotExist:
         # TODO refactor to register() function
         first_name, last_name = split_fullname(fullname)
@@ -103,6 +113,9 @@ def redirect(request):
         user = User.objects.create(username=username, \
             password=make_password(password), \
             first_name=first_name, last_name=last_name) 
+        user_profile = UserProfile.objects.create(user=user, \
+            location=location, description=description, homepage=homepage, \
+            profile_image_url=profile_image_url)
 
     request.session['username'] = username
     request.session['password'] = password

@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from tastypie.authorization import Authorization, DjangoAuthorization
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
@@ -15,7 +15,8 @@ from tastypie import fields
 
 from authentication import OAuth20Authentication
 from ciheul.common import MainResource, b64save_images, get_current_session
-from jendela24.models import Activities, RssNews
+from jendela24.models import Activities, RssNews, UserProfile
+from boilerpipe.extract import Extractor
 
 
 class RssNewsResource(MainResource, ModelResource):
@@ -33,26 +34,39 @@ class RssNewsResource(MainResource, ModelResource):
     def dehydrate(self, bundle):
         """GET Method"""
         
-        if not bundle.request.COOKIES['sessionid']:
+        #print bundle.data['content']
+        if bundle.data['content']:
+            extractor = Extractor(extractor='ArticleExtractor', html=bundle.data['content'])
+            bundle.data['content'] = extractor.getText()
+
+        # no cookies or no sessionid field in cookies, then just send normal
+        # newsfeed to anonymous user
+        if not bundle.request.COOKIES or not bundle.request.COOKIES['sessionid']:
             return bundle
 
         try:
+            # even if there is a cookie, sessionid field might be not exist,
+            # then it is also anonymous user
             s = get_current_session(bundle.request.COOKIES['sessionid'])
             if s is None:
                 return bundle
+
+            # get activity information whether user has already
+            # read/liked/shared
             activity = Activities.objects.get(user_id=s['_auth_user_id'], \
                 article_id=bundle.obj.id)
+
+            # assign information 
             bundle.data['activity'] = {
                 'read': activity.like or activity.share,
                 'like': activity.like,
                 'share': activity.share
             }
+
         except ObjectDoesNotExist:
+            # assign False if the news has never been opened
             bundle.data['activity'] = {'read': 0, 'like': 0, 'share': 0}
 
-        return bundle
-
-    def hydrate(self, bundle):
         return bundle
 
     def prepend_urls(self):
@@ -104,14 +118,23 @@ class RssNewsResource(MainResource, ModelResource):
         """
         try:
             s = Session.objects.get(pk=request.COOKIES['sessionid']).get_decoded()
-            a = Activities.objects.filter(user_id=s['_auth_user_id'], article_id=kwargs['pk'])
+
+            # get userprofile from user.id
+            user_profile = UserProfile.objects.get(user_id=s['_auth_user_id'])
+
+            # check whether user has opened the article
+            a = Activities.objects.filter(user_id=user_profile.id, \
+                article_id=kwargs['pk'])
             if not a:
-                Activities.objects.create(user_id=s['_auth_user_id'], article_id=kwargs['pk'], like=False, share=False)
+                # if not, create a new one
+                Activities.objects.create(user_id=user_profile.id, \
+                    article_id=kwargs['pk'], like=False, share=False)
             else:
+                # just ignore
                 return HttpAccepted()
         except ObjectDoesNotExist:
             return Http404() 
-            #raise BadRequest('Session or Activitiy does not exist.')
+            #raise BadRequest('Session or Activity does not exist.')
         except Exception:
             print "guest"
             # TODO http status does not work properly
@@ -124,11 +147,17 @@ class RssNewsResource(MainResource, ModelResource):
         """
         try:
             s = Session.objects.get(pk=request.COOKIES['sessionid']).get_decoded()
-            activity = Activities.objects.get(user_id=s['_auth_user_id'], article_id=kwargs['pk'])
+
+            # get userprofile from user.id
+            user_profile = UserProfile.objects.get(user_id=s['_auth_user_id'])
+
+            activity = Activities.objects.get(user_id=user_profile.id, \
+                article_id=kwargs['pk'])
             activity.like = True
             activity.save()
         except ObjectDoesNotExist:
-            Activities.objects.create(user_id=s['_auth_user_id'], article_id=kwargs['pk'], like=True, share=False)
+            Activities.objects.create(user_id=user_profile.id, \
+                article_id=kwargs['pk'], like=True, share=False)
             #raise BadRequest('Session or Activitiy does not exist.')
         except Exception:
             print "guest"
@@ -142,7 +171,12 @@ class RssNewsResource(MainResource, ModelResource):
         """
         try:
             s = Session.objects.get(pk=request.COOKIES['sessionid']).get_decoded()
-            activity = Activities.objects.get(user_id=s['_auth_user_id'], article_id=kwargs['pk'])
+
+            # get userprofile from user.id
+            user_profile = UserProfile.objects.get(user_id=s['_auth_user_id'])
+
+            activity = Activities.objects.get(user_id=user_profile.id, \
+                article_id=kwargs['pk'])
             activity.like = False
             activity.save()
         except ObjectDoesNotExist:
@@ -155,7 +189,12 @@ class RssNewsResource(MainResource, ModelResource):
         """
         try:
             s = Session.objects.get(pk=request.COOKIES['sessionid']).get_decoded()
-            activity = Activities.objects.get(user_id=s['_auth_user_id'], article_id=kwargs['pk'])
+
+            # get userprofile from user.id
+            user_profile = UserProfile.objects.get(user_id=s['_auth_user_id'])
+
+            activity = Activities.objects.get(user_id=user_profile.id, \
+                article_id=kwargs['pk'])
             activity.share = True
             activity.save()
         except ObjectDoesNotExist:
@@ -164,32 +203,30 @@ class RssNewsResource(MainResource, ModelResource):
 
 
 class UserResource(MainResource, ModelResource):
-    #activities = fields.ToManyField('ciheul.jendela24.api.ActivitiesResource', attribute='activity', full=True)
+    # impossible to add fields here. we cannot add attributes to built-in
+    # django model directly and tailor it with UserResource. instead, add 
+    # ToOneField field from UserProfileResource
 
     class Meta:
         queryset = User.objects.all()
         authorization = DjangoAuthorization()
         #authentication = OAuth20Authentication()
         excludes = ['password', 'is_active', 'is_staff', 'is_superuser', 
-            'resource_uri']
+            'resource_uri', 'id']
+        # disable any http method
+        allowed_methods = []
+        include_resource_uri = False
+
+
+class UserProfileResource(MainResource, ModelResource):
+    user = fields.ToOneField('ciheul.jendela24.api.UserResource', 'user', full=True)
+
+    class Meta:
+        queryset = UserProfile.objects.all()
+        authorization = DjangoAuthorization()
+        #authentication = OAuth20Authentication()
         resource_name = 'users'
-
-    def dehydrate(self, bundle):
-        print 'dehydrate'
-        return bundle
-
-    def hydrate(self, bundle):
-        print 'hydrate'
-        #raise ImmediateHttpResponse(response=HttpAccepted("debugging bro!\n"))
-        return bundle
-
-    def alter_list_data_to_serialize(self, request, response):
-        print "alter_list_data_to_serialize"
-        return response
-
-    def alter_detail_data_to_serialize(self, request, response):
-        print "alter_detail_data_to_serialize"
-        return response
+        include_resource_uri = False
 
     def prepend_urls(self):
         return [
@@ -216,7 +253,7 @@ class UserResource(MainResource, ModelResource):
             obj = self.cached_obj_get(bundle=bundle, \
                 **self.remove_api_resource_names(kwargs))
         except ObjectDoesNotExist:
-            return HttpGone()
+            return Http404()
         except MultipleObjectsReturned:
             return HttpMultipleChoices("More than one resource is found at this URI")
 
@@ -230,7 +267,7 @@ class UserResource(MainResource, ModelResource):
             obj = self.cached_obj_get(bundle=bundle, \
                 **self.remove_api_resource_names(kwargs))
         except ObjectDoesNotExist:
-            return HttpGone()
+            return Http404()
         except MultipleObjectsReturned:
             return HttpMultipleChoices("More than one resource is found at this URI")
 
@@ -251,6 +288,7 @@ class UserResource(MainResource, ModelResource):
         activities_resource = ActivitiesResource()
         return activities_resource.get_list(request, user=obj.pk, share=True)
 
+
 class ActivitiesResource(MainResource, ModelResource):
     user = fields.ToOneField(UserResource, 'user')
     article = fields.ToOneField(RssNewsResource, 'article', full=True)
@@ -258,6 +296,8 @@ class ActivitiesResource(MainResource, ModelResource):
     class Meta:
         queryset = Activities.objects.all().order_by('article').reverse()
         authorization = DjangoAuthorization()
+        # disable any http method
+        allowed_methods = []
         resource_name = 'activities'
         include_resource_uri = False
         #excludes = ['id']
