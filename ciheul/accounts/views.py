@@ -99,6 +99,8 @@ def redirect(request):
     description = u[0]['user']['description']
     location = u[0]['user']['location']
     homepage = u[0]['user']['url']
+    if not homepage:
+        homepage = ''
     profile_image_url = u[0]['user']['profile_image_url']
 
     try:
@@ -106,6 +108,7 @@ def redirect(request):
         user = User.objects.get(username=username)
         # TODO this is the worst way
         password = '!!rancakendal!!'
+        user_profile = UserProfile.objects.get(user_id=user.id)
     except ObjectDoesNotExist:
         # TODO refactor to register() function
         first_name, last_name = split_fullname(fullname)
@@ -119,6 +122,8 @@ def redirect(request):
 
     request.session['username'] = username
     request.session['password'] = password
+    request.session['user_id'] = user_profile.id
+
 
     # TODO get from twitter_session
     #request.session['oauth_token'] = 
@@ -126,9 +131,9 @@ def redirect(request):
 
     status = login_ciheul(request, username, password)
     if status:
-        return HttpResponseRedirect(ip_address)
-        #return HttpResponseRedirect('http://127.0.0.1:8002/jendela24/')
-        #return HttpResponseRedirect('http://127.0.0.1:8002/accounts/profile')
+        response = HttpResponseRedirect(ip_address)
+        response.set_cookie('user_id', user_profile.id, max_age=1209600)
+        return response
     return HttpResponse('Wrong password. Malicious attack? <a href="/accounts/login">login</a>')
 
 

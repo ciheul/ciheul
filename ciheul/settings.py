@@ -166,12 +166,15 @@ INSTALLED_APPS = (
 
     # third plugin
     'tastypie',
-    'social.apps.django_app.default',
     'corsheaders',
     'provider',
     'provider.oauth2',
 
-    # unused
+    # useless
+    # python-social is replaced by rauth
+    #'social.apps.django_app.default',
+
+    # maybe in the future this module would be implemented
     #'registration',
 )
 

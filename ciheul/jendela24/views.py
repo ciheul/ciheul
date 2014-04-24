@@ -16,17 +16,18 @@ redis = StrictRedis('localhost')
 
 
 def home(request):
-    #if getattr(request.session['username'], None):
-    try:
+    if 'username' in request.session and 'user_id' in request.COOKIES:
         username = request.session['username']
-    except KeyError:
+        status = 1
+    else:
         username = 'guest'
-        print "no username in session"
+        status = 0
 
     context = {
         'title': 'Jendela24',
         'twitter_id': getattr(settings, 'SOCIAL_AUTH_TWITTER_KEY', None),
-        'username': username
+        'username': username,
+        'status': status,
     }
     return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/jendela24/index.html'), context)
 

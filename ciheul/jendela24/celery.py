@@ -86,13 +86,17 @@ def fetch_rss():
             r = requests.get(f['link'])
             if r.status_code != 200:
                 continue
+
+            # TODO Boilerpipe should have been implemented here
             content = r.text
+            image_url = ''
 
             # sql insert. only unique news is inserted. not Django-way
             insert_string = """
                 INSERT INTO jendela24_rssnews 
-                    (source, title, url, summary, created_at, published_at, content)
-                    SELECT %s, %s, %s, %s, %s, %s, %s
+                    (source, title, url, summary, created_at, published_at,
+                        content, image_url)
+                    SELECT %s, %s, %s, %s, %s, %s, %s, %s
                     WHERE NOT EXISTS (
                         SELECT 1 FROM jendela24_rssnews 
                             WHERE title=%s OR url=%s)
@@ -100,10 +104,10 @@ def fetch_rss():
             """
         
             # insert rss news to database
-            cursor.execute(insert_string, 
-                    (source, f['title'], f['link'], f['summary'], 
-                    datetime.now(), convert_pub_date(f['published']), content, 
-                    f['title'], f['link']))
+            cursor.execute(insert_string, \
+                    (source, f['title'], f['link'], f['summary'], \
+                    datetime.now(), convert_pub_date(f['published']), content, \
+                    image_url, f['title'], f['link']))
 
             # return a tuple of (title, source, published_at, url)
             row = cursor.fetchone()
