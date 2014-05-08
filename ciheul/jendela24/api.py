@@ -184,9 +184,11 @@ class RssNewsResource(MainResource, ModelResource):
         """
         try:
             s = Session.objects.get(pk=request.COOKIES['sessionid']).get_decoded()
+            print s
 
             activity = Activities.objects.get(user_id=s['user_id'], \
                 article_id=kwargs['pk'])
+            print activity
 
             try:
                 article_stat = ArticleStat.objects.get(article_id=kwargs['pk'], \

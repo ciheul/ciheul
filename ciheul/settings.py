@@ -115,6 +115,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     #'django.template.loaders.eggs.Loader',
+    'django_mobile.loader.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -126,6 +127,8 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django_mobile.middleware.MobileDetectionMiddleware',
+    'django_mobile.middleware.SetFlavourMiddleware',
 )
 
 ROOT_URLCONF = 'ciheul.urls'
@@ -165,10 +168,11 @@ INSTALLED_APPS = (
     'south',
 
     # third plugin
-    'tastypie',
     'corsheaders',
+    'django_mobile',
     'provider',
     'provider.oauth2',
+    'tastypie',
 
     # useless
     # python-social is replaced by rauth
@@ -214,13 +218,14 @@ TASTYPIE_DEFAULT_FORMATS = ['json']
 TASTYPIE_ALLOW_MISSING_SLASH = True
 
 AUTHENTICATION_BACKENDS = {
-    'social.backends.twitter.TwitterOAuth',
     'django.contrib.auth.backends.ModelBackend',
+    'social.backends.twitter.TwitterOAuth',
 }
 
 TEMPLATE_CONTEXT_PROCESSORS = {
     'django.contrib.auth.context_processors.auth',
     'social.apps.django_app.context_processors.backends',
+    'django_mobile.context_processors.flavour',
 }
 
 # python-social-auth
