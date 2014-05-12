@@ -9,7 +9,7 @@ from urlparse import urlsplit
 env.hosts = [
 #        'winnuayi@192.168.1.2:22',
 #        'winnuayi@192.168.1.3:22', 
-        'dev@192.168.1.3',
+         'dev@192.168.1.3',
 #        'dev@62.113.218.221:13203',
 ]
 
@@ -153,8 +153,8 @@ def update():
                     os.path.join(env.CIHEUL_DIR, 'requirements.txt'))
             run("pip install -r requirements.txt")
             
-            put('start_realtime_django.sh', \
-                    os.path.join(env.CIHEUL_DIR, 'start_realtime_django.sh'))
+            put('start_gunicorn_socketio.sh', \
+                    os.path.join(env.CIHEUL_DIR, 'start_gunicorn_socketio.sh'))
 
 
 @task
