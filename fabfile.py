@@ -13,17 +13,17 @@ env.hosts = [
 #        'dev@62.113.218.221:13203',
 ]
 
+env.roledefs = {
+    "development": ["192.168.1.3"],
+    "development_proj": ["192.168.1.2"],
+    "production": ["192.168.1.3", "62.113.218.221"],
+}
+
 # root directory
 env.directories = {
         "production": '~',
         "development": '~',        
         "development_proj": '~/Projects/dev'        
-}
-
-env.roledefs = {
-    "development": ["192.168.1.3"],
-    "development_proj": ["192.168.1.2"],
-    "production": ["192.168.1.3", "62.113.218.221"],
 }
 
 # invert roledefs
@@ -37,11 +37,12 @@ env.colorize_errors = True
 
 # github
 GIT_CIHEUL = 'https://github.com/ciheul/ciheul'
+GIT_CIHEUL_LOCAL = 'winnuayi@192.168.1.103:/Users/winnuayi/Projects/dev/git/ciheul.git'
 
 
 def init_directory():
     """Production and Development server have different project root 
-       directory."""
+       directory. So that, path directory is handled here."""
     o = urlsplit('ssh://' + env.host_string)
     env.PROJECTS_DEV_DIR = env.directories[env.invert_roledefs[o.hostname]]
     env.WWW_DIR = os.path.join(env.PROJECTS_DEV_DIR, 'www')
@@ -69,7 +70,6 @@ def setup():
         sudo("apt-get -y install gdal-bin")
         sudo("apt-get -y install supervisor")
         sudo("apt-get -y install python-pip")
-
         
         sudo("pip install virtualenv")
 
@@ -77,7 +77,7 @@ def setup():
 @task
 #@parallel
 def deploy():
-    """Deploy Ciheul.com web."""
+    """Deploy Ciheul.com web to empty folder."""
     setup()
     init_directory()
 
@@ -91,7 +91,8 @@ def deploy():
     if not exists(env.CIHEUL_DIR):
         run("mkdir -p " + env.WWW_DIR)
         with cd(env.WWW_DIR):
-            run('git clone ' + GIT_CIHEUL)
+            #run('git clone ' + GIT_CIHEUL)
+            run('git clone ' + GIT_CIHEUL_LOCAL)
 
     # install python packages using pip
     with prefix("source " + os.path.join(env.VENV_CIHEUL_DIR, 'bin/activate')):
@@ -108,7 +109,7 @@ def deploy():
     put('supervisor_ciheul.conf', '/etc/supervisor/conf.d/ciheul.conf', 
         use_sudo=True)
 
-    # replace command path depends on its different directory.
+    # replacing command path depends on its different directory.
     # check 'env.directories'. pwd command to recognize ciheul directory.
     with cd(env.CIHEUL_DIR):
         x = run("echo `pwd`")
@@ -118,6 +119,25 @@ def deploy():
     # update supervisor
     sudo('supervisorctl reread && supervisorctl update')
     #sudo('supervisorctl start ciheul')
+
+
+@task
+def update():
+    """Update to the latest version."""
+    init_directory()
+    with cd(env.CIHEUL_DIR):
+        run('git stash')
+        run('git pull')
+
+    # install python packages using pip
+    with prefix("source " + os.path.join(env.VENV_CIHEUL_DIR, 'bin/activate')):
+        with cd(env.CIHEUL_DIR):
+            put('requirements.txt', \
+                    os.path.join(env.CIHEUL_DIR, 'requirements.txt'))
+            run("pip install -r requirements.txt")
+            
+            put('start_gunicorn_socketio.sh', \
+                    os.path.join(env.CIHEUL_DIR, 'start_gunicorn_socketio.sh'))
 
 
 @task
@@ -138,26 +158,6 @@ def clean():
     sudo('supervisorctl stop ciheul && supervisorctl remove ciheul')
     with settings(warn_only=True):
         run("pkill gunicorn")
-
-
-
-@task
-def update():
-    """Update to the latest version."""
-    init_directory()
-    with cd(env.CIHEUL_DIR):
-        run('git stash')
-        run('git pull')
-
-    # install python packages using pip
-    with prefix("source " + os.path.join(env.VENV_CIHEUL_DIR, 'bin/activate')):
-        with cd(env.CIHEUL_DIR):
-            put('requirements.txt', \
-                    os.path.join(env.CIHEUL_DIR, 'requirements.txt'))
-            run("pip install -r requirements.txt")
-            
-            put('start_gunicorn_socketio.sh', \
-                    os.path.join(env.CIHEUL_DIR, 'start_gunicorn_socketio.sh'))
 
 
 @task
