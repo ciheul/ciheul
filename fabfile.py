@@ -60,6 +60,7 @@ def setup():
         sudo("apt-get -y install redis-server")
         sudo("apt-get -y install rabbitmq-server")
 
+        sudo("apt-get -y install libevent-dev")
         sudo("apt-get -y install libpq-dev")
         sudo("apt-get -y install gcc g++")
         sudo("apt-get -y install python-dev")
@@ -68,6 +69,8 @@ def setup():
         sudo("apt-get -y install gdal-bin")
         sudo("apt-get -y install supervisor")
         sudo("apt-get -y install python-pip")
+
+        
         sudo("pip install virtualenv")
 
 
