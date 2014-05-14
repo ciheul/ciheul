@@ -23,7 +23,7 @@ def home(request):
         username = 'guest'
         status = 0
 
-    print request.flavour
+    print "django-mobile:", request.flavour
     context = {
         'title': 'Jendela24',
         'twitter_id': getattr(settings, 'SOCIAL_AUTH_TWITTER_KEY', None),

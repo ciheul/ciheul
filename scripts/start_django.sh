@@ -10,9 +10,9 @@ NUM_WORKERS=2
 #GROUP=winnuayi
 
 # get project dev directory
-cd ../..
+cd ../../..
 PROJECTS_DEV_DIR=$(pwd)
-echo $PROJECTS_DEV_DIR
+echo "PROJECTS_DEV_DIR="$PROJECTS_DEV_DIR
 
 # create folder for logging if necessary
 #test -d $LOGDIR || sudo mkdir -p $LOGDIR

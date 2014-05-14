@@ -7,9 +7,9 @@ from urlparse import urlsplit
 
 # main configuration
 env.hosts = [
-#        'winnuayi@192.168.1.2:22',
-#        'winnuayi@192.168.1.3:22', 
-         'dev@192.168.1.3',
+        'winnuayi@192.168.1.2',
+#        'winnuayi@192.168.1.3', 
+         #'dev@192.168.1.3',
 #        'dev@62.113.218.221:13203',
 ]
 
@@ -26,7 +26,7 @@ env.directories = {
         "development_proj": '~/Projects/dev'        
 }
 
-# invert roledefs
+# invert roledefs, key <-> value
 env.invert_roledefs = {}
 for i in env.roledefs:
     for j in env.roledefs[i]:
@@ -38,6 +38,7 @@ env.colorize_errors = True
 # github
 GIT_CIHEUL = 'https://github.com/ciheul/ciheul'
 GIT_CIHEUL_LOCAL = 'winnuayi@192.168.1.103:/Users/winnuayi/Projects/dev/git/ciheul.git'
+GIT_ANGULAR_SEED_LOCAL = 'winnuayi@192.168.1.103:/Users/winnuayi/Projects/dev/git/angular-seed.git'
 
 
 def init_directory():
@@ -60,6 +61,8 @@ def setup():
         sudo("apt-get -y install postgresql")
         sudo("apt-get -y install redis-server")
         sudo("apt-get -y install rabbitmq-server")
+
+        #http://stackoverflow.com/questions/12913141/installing-from-npm-fails
 
         sudo("apt-get -y install libevent-dev")
         sudo("apt-get -y install libpq-dev")
@@ -93,6 +96,9 @@ def deploy():
         with cd(env.WWW_DIR):
             #run('git clone ' + GIT_CIHEUL)
             run('git clone ' + GIT_CIHEUL_LOCAL)
+            run('git clone ' + GIT_ANGULAR_SEED_LOCAL)
+            # create soft link to angular-seed
+            # install bower_components
 
     # install python packages using pip
     with prefix("source " + os.path.join(env.VENV_CIHEUL_DIR, 'bin/activate')):
@@ -106,13 +112,13 @@ def deploy():
     sudo('mkdir -p /var/log/supervisor')
 
     # copy ciheul's supervisor configuration to supervisor directory
-    put('supervisor_ciheul.conf', '/etc/supervisor/conf.d/ciheul.conf', 
+    put('scripts/supervisor_ciheul.conf', '/etc/supervisor/conf.d/ciheul.conf', 
         use_sudo=True)
 
     # replacing command path depends on its different directory.
     # check 'env.directories'. pwd command to recognize ciheul directory.
     with cd(env.CIHEUL_DIR):
-        x = run("echo `pwd`")
+        x = run("echo `pwd`/scripts")
     sed("/etc/supervisor/conf.d/ciheul.conf", "replace_ciheul_dir", x, 
         use_sudo=True)
         
