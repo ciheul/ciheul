@@ -10,8 +10,9 @@ import feedparser
 import psycopg2
 import rfc822
 import json
-from boilerpipe.extract import Extractor
+#from boilerpipe.extract import Extractor
 import requests
+import config
 #import urllib2
 
 
@@ -43,8 +44,8 @@ def publish_news():
 
 @app.task
 def fetch_rss():
-    conn_string = "host='localhost' dbname='ciheul' user='winnuayi' password=''"
-    conn = psycopg2.connect(conn_string)
+    conn = psycopg2.connect("host='%s' dbname='%s' user='%s' password='%s'" % \
+        (config.HOST, config.DB, config.USER, config.PASS))
     cursor = conn.cursor()
     print "Connected to database!\n"
     
