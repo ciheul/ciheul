@@ -9,6 +9,7 @@ django-tastypie==0.10.0
 feedparser==5.1.3
 gevent==0.13.8
 gevent-socketio==0.3.6
+gunicorn==18.0
 ipython==1.1.0
 mimeparse==0.1.3
 nltk==2.0.4
