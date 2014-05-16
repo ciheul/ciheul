@@ -158,12 +158,12 @@ INSTALLED_APPS = (
 
     # ciheul apps
     'accounts',
-    'ciheul',
-    'bigear',
-    'bigdrive',
-    'dirban',
-    'bigpath', 
-    'juara',
+    #'ciheul',
+    #'bigear',
+    #'bigdrive',
+    #'dirban',
+    #'bigpath', 
+    #'juara',
     'jendela24',
     'south',
 
