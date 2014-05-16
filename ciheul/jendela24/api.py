@@ -15,7 +15,7 @@ from tastypie import fields
 
 from authentication import OAuth20Authentication
 from boilerpipe.extract import Extractor
-from ciheul.common import MainResource, b64save_images, get_current_session
+from ciheul.common import MainResource, get_current_session
 from jendela24.models import Activities, ArticleStat, RssNews, UserProfile
 
 from datetime import date

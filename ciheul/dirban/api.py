@@ -1,6 +1,6 @@
 from tastypie.resources import ModelResource
 from tastypie.authorization import Authorization
-from ciheul.common import MainResource, b64save_images
+from ciheul.common import MainResource
 from dirban import models
 
 
@@ -22,6 +22,7 @@ class BusinessResource(MainResource, ModelResource):
         bundle.data['longitude'] = float(lon)
         bundle.data['latitude'] = float(lat)
 
-        b64save_images(bundle.data['images'])
+        # TODO change PIL to Pillow
+        #b64save_images(bundle.data['images'])
 
         return bundle
