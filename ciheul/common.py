@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import commands
 import sys
 import base64
-import PIL.Image
+#import PIL.Image
 import cStringIO
 import os.path
 import uuid
@@ -56,24 +56,24 @@ def get_ip_port():
     return (ip, port)
 
 
-def b64save_images(b64images):
-    for b64image in b64images:
-        # decode
-        data = base64.b64decode(b64image)
-
-        file_like = cStringIO.StringIO(data)
-        img = PIL.Image.open(file_like)
-
-        # TODO investigate whether uuid is indeed unique
-        # generate random filename
-        image_name = generate_random_filename() + '.jpg'
-
-        img.save(os.path.join(settings.PROJECT_PATH, 'static/img', image_name))
-
-def save_image(b64image):
-    data = base64.b64decode(b64image)
-    file_like = cStringIO.StringIO(data)
-    img = PIL.image.open(file_like)
+#def b64save_images(b64images):
+#    for b64image in b64images:
+#        # decode
+#        data = base64.b64decode(b64image)
+#
+#        file_like = cStringIO.StringIO(data)
+#        img = PIL.Image.open(file_like)
+#
+#        # TODO investigate whether uuid is indeed unique
+#        # generate random filename
+#        image_name = generate_random_filename() + '.jpg'
+#
+#        img.save(os.path.join(settings.PROJECT_PATH, 'static/img', image_name))
+#
+#def save_image(b64image):
+#    data = base64.b64decode(b64image)
+#    file_like = cStringIO.StringIO(data)
+#    img = PIL.image.open(file_like)
 
 
 def generate_system_name():

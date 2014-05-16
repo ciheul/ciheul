@@ -12,7 +12,8 @@ import rfc822
 import json
 #from boilerpipe.extract import Extractor
 import requests
-import config
+from ciheul import config
+
 #import urllib2
 
 
