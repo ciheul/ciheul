@@ -23,14 +23,17 @@ def home(request):
         username = 'guest'
         status = 0
 
-    print "django-mobile:", request.flavour
     context = {
         'title': 'Jendela24',
         'twitter_id': getattr(settings, 'SOCIAL_AUTH_TWITTER_KEY', None),
         'username': username,
         'status': status,
     }
-    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/jendela24/index.html'), context)
+
+    #if request.flavour == 'mobile':
+    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/mnp/index.html'), context)
+    #elif request.flavour == 'full':
+    #return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/jendela24/index.html'), context)
 
 
 def socketio(request):
