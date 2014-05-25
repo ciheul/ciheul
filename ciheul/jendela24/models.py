@@ -46,4 +46,5 @@ class ArticleStat(models.Model):
     shares = models.IntegerField(default=0)
 
     def __unicode__(self):
-        return self.article
+        return u'reads: %s | likes: %s | dislikes: %s | shares: %s' \
+            % (self.reads, self.likes, self.dislikes, self.shares)

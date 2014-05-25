@@ -58,7 +58,8 @@ class RssNewsResource(MainResource, ModelResource):
 
         # no cookies or no sessionid field in cookies, then just send normal
         # newsfeed to anonymous user
-        if not bundle.request.COOKIES or not bundle.request.COOKIES['sessionid']:
+        #if not bundle.request.COOKIES or not bundle.request.COOKIES['sessionid']:
+        if not bundle.request.COOKIES or not 'sessionid' in bundle.request.COOKIES:
             return bundle
 
         try:
@@ -153,13 +154,14 @@ class RssNewsResource(MainResource, ModelResource):
         POST /news/<article_id>/read
         """
         try:
-            article_stat = ArticleStat.objects.get(article_id=kwargs['pk'], \
-                date=date.today())
+            article_stat = ArticleStat.objects.get(article_id=kwargs['pk'],
+                                                   date=date.today())
             article_stat.reads += 1
             article_stat.save()
         except ObjectDoesNotExist:
-            ArticleStat.objects.create(article_id=kwargs['pk'], \
-                date=date.today(), reads=1, likes=0, shares=0)
+            ArticleStat.objects.create(article_id=kwargs['pk'],
+                                       date=date.today(), 
+                                       reads=1, likes=0, shares=0)
 
         try:
             # check whether user has opened the article
@@ -184,45 +186,63 @@ class RssNewsResource(MainResource, ModelResource):
         """
         try:
             s = Session.objects.get(pk=request.COOKIES['sessionid']).get_decoded()
-            print s
+        except Exception, e:
+            print e
+            # TODO redirect to login page
+            return Http404()
 
-            activity = Activities.objects.get(user_id=s['user_id'], \
-                article_id=kwargs['pk'])
-            print activity
-
-            try:
-                article_stat = ArticleStat.objects.get(article_id=kwargs['pk'], \
-                    date=date.today())
-            except ObjectDoesNotExist:
-                pass
-
-            if activity.like == False and activity.dislike == False:
-                activity.like = True
-
-                article_stat.likes += 1
-
-                activity.save()
-                article_stat.save()
-            elif activity.like == True and activity.dislike == False:
-                pass
-            elif activity.like == False and activity.dislike == True:
-                activity.like = True
-                activity.dislike = False
-
-                article_stat.likes += 1
-                article_stat.dislikes -= 1
-
-                activity.save()
-                article_stat.save()
-            else:
-                print "[ERROR] Like and Dislike cannot be True at the same time."
+        try:
+            activity = Activities.objects.get(user_id=s['user_id'],
+                                              article_id=kwargs['pk'])
         except ObjectDoesNotExist:
-            Activities.objects.create(user_id=s['user_id'], \
-                article_id=kwargs['pk'], like=True, share=False)
-        except Exception:
-            print "guest"
-            # TODO http status does not work properly
-            return Http404() 
+            activity = Activities.objects.create(user_id=s['user_id'],
+                                      article_id=kwargs['pk'], 
+                                      like=True, 
+                                      dislike=False, 
+                                      share=False)
+            print "Create activity", kwargs['pk']
+
+        try:
+            article_stat = ArticleStat.objects.get(article_id=kwargs['pk'],
+                                                   date=date.today())
+        except ObjectDoesNotExist:
+            article_stat = ArticleStat.objects.create(
+                article_id=kwargs['pk'],
+                date=date.today(), 
+                reads=1, likes=0, dislikes=0, shares=0)
+
+        if activity.dislike == False:
+            activity.like = True
+
+            article_stat.likes += 1
+
+            activity.save()
+            article_stat.save()
+        #if activity.like == False and activity.dislike == False:
+        #    activity.like = True
+
+        #    article_stat.likes += 1
+
+        #    activity.save()
+        #    article_stat.save()
+        #elif activity.like == True and activity.dislike == False:
+        #    pass
+        elif activity.like == False and activity.dislike == True:
+            activity.like = True
+            activity.dislike = False
+
+            article_stat.likes += 1
+            article_stat.dislikes -= 1
+
+            activity.save()
+            article_stat.save()
+        else:
+            print "[ERROR] Like and Dislike cannot be True at the same time."
+
+        print "article_stat:"
+        print article_stat
+        print
+
         return HttpCreated()
 
     def post_unlike(self, request, **kwargs):
@@ -240,8 +260,15 @@ class RssNewsResource(MainResource, ModelResource):
                     date=date.today())
                 article_stat.likes -= 1
                 article_stat.save()
+
+                print "article_stat:"
+                print article_stat
+                print
             except ObjectDoesNotExist:
-                pass
+                article_stat = ArticleStat.objects.create(
+                    article_id=kwargs['pk'],
+                    date=date.today(), 
+                    reads=1, likes=0, shares=0)
 
             activity.like = False
             activity.save()
@@ -255,43 +282,63 @@ class RssNewsResource(MainResource, ModelResource):
         """
         try:
             s = Session.objects.get(pk=request.COOKIES['sessionid']).get_decoded()
-
-            activity = Activities.objects.get(user_id=s['user_id'], \
-                article_id=kwargs['pk'])
-
-            try:
-                article_stat = ArticleStat.objects.get(article_id=kwargs['pk'], \
-                    date=date.today())
-            except ObjectDoesNotExist:
-                pass
-
-            if activity.like == False and activity.dislike == False:
-                activity.dislike = True
-
-                article_stat.dislikes += 1
-
-                activity.save()
-                article_stat.save()
-            elif activity.like == True and activity.dislike == False:
-                activity.like = False 
-                activity.dislike = True
-
-                article_stat.likes -= 1
-                article_stat.dislikes += 1
-
-                activity.save()
-                article_stat.save()
-            elif activity.like == False and activity.dislike == True:
-                pass
-            else:
-                print "[ERROR] Like and Dislike cannot be True at the same time."
-        except ObjectDoesNotExist:
-            Activities.objects.create(user_id=s['user_id'], \
-                article_id=kwargs['pk'], like=True, share=False)
         except Exception:
             print "guest"
             # TODO http status does not work properly
             return Http404() 
+
+        try:
+            activity = Activities.objects.get(user_id=s['user_id'],
+                                              article_id=kwargs['pk'])
+        except ObjectDoesNotExist:
+            activity = Activities.objects.create(user_id=s['user_id'],
+                                      article_id=kwargs['pk'], 
+                                      like=False, 
+                                      dislike=True, 
+                                      share=False)
+            print "Create activity", kwargs['pk']
+
+        try:
+            article_stat = ArticleStat.objects.get(article_id=kwargs['pk'],
+                                                   date=date.today())
+        except ObjectDoesNotExist:
+            article_stat = ArticleStat.objects.create(
+                article_id=kwargs['pk'],
+                date=date.today(), 
+                reads=1, likes=0, dislikes=0, shares=0)
+
+        if activity.like == False:
+            activity.dislike = True
+
+            article_stat.dislikes += 1
+
+            activity.save()
+            article_stat.save()
+        #if activity.like == False and activity.dislike == False:
+        #    activity.dislike = True
+
+        #    article_stat.dislikes += 1
+
+        #    activity.save()
+        #    article_stat.save()
+        elif activity.like == True and activity.dislike == False:
+            activity.like = False 
+            activity.dislike = True
+
+            article_stat.likes -= 1
+            article_stat.dislikes += 1
+
+            activity.save()
+            article_stat.save()
+        #elif activity.like == False and activity.dislike == True:
+        #    pass
+        else:
+            print "[ERROR] Like and Dislike cannot be True at the same time."
+
+        print "article_stat:"
+        print article_stat
+        print
+
         return HttpCreated()
 
     def post_canceldislike(self, request, **kwargs):
@@ -309,8 +356,14 @@ class RssNewsResource(MainResource, ModelResource):
                     date=date.today())
                 article_stat.dislikes -= 1
                 article_stat.save()
+                print "article_stat:"
+                print article_stat
+                print
             except ObjectDoesNotExist:
-                pass
+                article_stat = ArticleStat.objects.create(
+                    article_id=kwargs['pk'],
+                    date=date.today(), 
+                    reads=1, likes=0, shares=0)
 
             activity.dislike = False
             activity.save()

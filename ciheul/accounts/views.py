@@ -27,7 +27,7 @@ twitter = OAuth1Service(
     base_url='https://api.twitter.com/1.1/')
 
 #ip_address = 'http://127.0.0.1:8002/jendela24'
-ip_address = 'http://192.168.1.103:8002/jendela24/'
+ip_address = 'http://192.168.1.103/jendela24/'
 
 
 def login_twitter(request):
