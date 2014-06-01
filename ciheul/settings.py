@@ -158,6 +158,7 @@ INSTALLED_APPS = (
 
     # ciheul apps
     'accounts',
+    'home',
     #'ciheul',
     #'bigear',
     #'bigdrive',
