@@ -1,0 +1,315 @@
+{% extends "base_home.html" %}
+
+
+{% block style %}
+    <style>
+        h2.anchor-about {display: block; position: relative; top: -250px; visibility: hidden;}
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <!-- Begin Navigation -->
+    <nav id="navigation-blog" class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/home"><strong>Ciheul</strong></a>
+        </div>
+        <div class="triangle visible-md visible-lg"></div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/home">Home</a></li>
+                <li class="active"><a href="about">About</a></li>
+                <!--<li><a href="services">Services</a></li>-->
+                <!--<li><a href="portfolio">Portfolio</a></li>-->
+                <li><a href="contact">Contact</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+    <!-- End Navigation -->
+
+<div class="container">
+
+</div>
+<!--
+<div id="Parallax1" class="parallax-small padding-top-big padding-bottom-medium" style="background-image: url('./images/content/parallax1.jpg')">
+    <div class="container">
+        <div class="col-sm-6">
+            <p><h3><strong>About us</strong></h3></p>
+        </div>
+        <div class="col-sm-6">
+            <ol class="breadcrumb pull-right">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">About Us</li>
+            </ol>
+        </div>
+    </div>
+</div>
+-->
+<div class="container">
+
+</div>
+<div class="spacer" style="height:60px"></div>
+<div class="container blog padding-small">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="spacer" style="height:15px"></div>
+            <div class="list-group">
+              <a href="#" class="list-group-item">About Ciheul Engineering</a>
+              <a href="#vmv" class="list-group-item">Vision, Mission & Value</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h5 id="ciheul" class="anchor-about">About Ciheul Engineering</h5>
+            <p>Ciheul Engineering is an information technology company that offers solution for your business needs. Our experience and expertise in IT has made Ciheul as a company that will deliver the best services in any situation.</p>
+            <p>IT expertise is our passion. It is our utmost passion to design and implement technology-based solution that gives stakeholders in your organization the right "tools" to make better decision. Moreover, using our solution will optimize your cost effectively and efficiently that leads to achieve high productivity.</p>
+            <p>It is our honor to help your business to be the best by prioritizing your trust and satisfaction.</p>
+
+            <hr>
+            <h5 id="vmv" class="anchor-about">Vision, Mission, &amp Value</h5>
+            <p><strong>Vision</strong></p>
+            <ul>
+              <li>To organize information and use it to make the world a better place.</li>
+            </ul>
+            <p><strong>Mission</strong></p>
+            <ul>
+              <li>Improving Indonesia human resource to compete in the world level.</li>
+              <li>Delivering trusted solution for our clients.</li>
+              <li>Giving satisfaction to our clients, people, and investor.</li>
+            </ul>
+            <p><strong>Value</strong></p>
+            <ul>
+              <li><i>Trust is our business.</i><br>Built on trust, success will grow together and makes everyone happy.</li>
+              <li><i>Customer-oriented first and all else will follow.</i><br>We believe your satisfaction is important. Afterwards, all good values will come.</li>
+              <li><i>Our people are our most important asset.</i><br>Whoever works in Ciheul is our important asset. That is why, working should be fun.</li>
+            </ul>
+        </div>
+        <!--
+        <div class="col-md-6">
+            <h5>Our areas of expertise</h5>
+            <div class="progress alternative" data-percentage="20">
+                <span class="bar-info">Web Design</span>
+                <div class="bar" style="width: 60%;"></div>
+            </div>
+
+            <div class="progress alternative" data-percentage="40">
+                <span class="bar-info">Development</span>
+                <div class="bar" style="width: 70%;"></div>
+            </div>
+
+            <div class="progress alternative" data-percentage="60">
+                <span class="bar-info">UI / UX</span>
+                <div class="bar" style="width: 95%;"></div>
+            </div>
+        </div>
+        -->
+    </div>
+</div>
+
+<div class="container">
+
+</div>
+<!--
+<div class="light-gray-row padding-small">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <div class="icon-counter animated" data-fx="pulse">
+                <span class="icon color-font">
+                    <i class="fa fa-desktop"></i>
+                </span>
+                    <br>
+                <span class="counter" data-to="12300">
+                    0
+                </span>
+                    <hr>
+                <span class="description">
+                    Pixels crafted so far
+                </span>
+                </div>
+            </div>
+            <div class="col-md-43 col-sm-3">
+                <div class="icon-counter animated" data-fx="pulse">
+                <span class="icon color-font">
+                    <i class="fa fa-bullhorn"></i>
+                </span>
+                    <br>
+                <span class="counter" data-to="77654">
+                    0
+                </span>
+                    <hr>
+                <span class="description">
+                    Hours of music yearly
+                </span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <div class="icon-counter animated" data-fx="pulse">
+                <span class="icon color-font">
+                    <i class="fa fa-lightbulb-o"></i>
+                </span>
+                    <br>
+                <span class="counter" data-to="99999">
+                    0
+                </span>
+                    <hr>
+                <span class="description">
+                    Brilliant ideas
+                </span>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-3">
+                <div class="icon-counter animated" data-fx="pulse">
+            <span class="icon color-font">
+                <i class="fa fa-heart-o"></i>
+            </span>
+                    <br>
+            <span class="counter" data-to="11522">
+                0
+            </span>
+                    <hr>
+            <span class="description">
+                Happy customers
+            </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<div class="container">
+
+</div>
+<!--
+<div class="color-row padding-small">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h4 class="animated" data-fx="fadeInDown">Hey, <span class="light">get boston theme on themeforest</span></h4>
+                <a href="http://themeforest.net/item/boston-corporate-parallax-html-template/6571285" class="btn btn-white btn-lg btn-scroll btn-top-margin animated" data-fx="fadeInUp">Purchase</a>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<div class="container">
+
+</div>
+<!--
+<div id="Parallax2" class="parallax padding-big" style="background-image: url('./images/content/parallax2.jpg')">
+    <div class="container">
+        <div class="media animated" data-fx="fadeInLeft">
+            <a class="component-left" href="#">
+                <img src="./images/content/person4.jpg" alt="">
+            </a>
+
+            <div class="media-body">
+                <p class="h3">Twinkle, twinkle, little bat!<br>
+                    How I wonder what you're at.</p>
+
+                <p class="h5"><i>Jane Doe</i></p>
+
+                <p class="h5"><i>CEO at Megasoft</i></p>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<div class="container">
+
+</div>
+
+<div class="container">
+
+</div>
+
+<!--
+<footer class="color-row">
+    <div class="container text-center padding-small">
+        <p class="h3"><strong>Bos</strong>ton</p>
+        <div class="social-unit">
+            <div class="container text-center">
+                <div class="social">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Facebook">
+                                    <p><i class="fa fa-facebook"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Twitter">
+                                    <p><i class="fa fa-twitter"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="LinkedIn">
+                                    <p><i class="fa fa-linkedin-square"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Google+">
+                                    <p><i class="fa fa-google-plus"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Pinterest">
+                                    <p><i class="fa fa-pinterest"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Flickr">
+                                    <p><i class="fa fa-flickr"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Dribbble">
+                                    <p><i class="fa fa-dribbble"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Youtube">
+                                    <p><i class="fa fa-youtube"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="circle-btn" data-toggle="tooltip" data-placement="bottom" title="Vimeo">
+                                    <p><i class="fa fa-vimeo-square"></i></p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p class="copy">Copyright © 2014 CreateIT</p>
+    </div>
+</footer>
+-->
+<a href="#top" id="toTop" class="btn-scroll"><i class="fa fa-chevron-up"></i> Back to top</a>
+{% endblock %}

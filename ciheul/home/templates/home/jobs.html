@@ -1,0 +1,67 @@
+{% extends "base_home.html" %}
+
+
+{% block style %}
+    <style>
+        h2.anchor-about {display: block; position: relative; top: -250px; visibility: hidden;}
+    </style>
+{% endblock %}
+
+
+{% block topnav %}
+    <nav id="navigation-blog" class="navbar navbar-default navbar-fixed-top" role="navigation">
+{% endblock %}
+
+
+{% block content %}
+<div class="spacer" style="height:60px"></div>
+<div class="container blog padding-small">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="spacer" style="height:15px"></div>
+            <div class="list-group">
+              <a href="#job1" class="list-group-item">Front End Web Developer</a>
+              <a href="#job2" class="list-group-item">Back End Web Developer</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h5 id="ciheul" class="anchor-about">Do Cool Things That Matter</h5>
+            <p>Ciheul Engineering is and always will be an engineering company. We hire people, both young and veteran, who dares to tackle some of technology's greatest challenges. At Ciheul, engineers not only propose innovative idea and make it happens for our clients, but also have fun with the co-workers.</p>
+            <p>If you are interested for solving engineering problem, please send email to <strong>jobs [at] ciheul [dot] com</strong></p>
+            <hr>
+
+            <h6 id="job1" class="anchor-about">Front End Web Developer</h5>
+            <div class="spacer" style="height:10px"></div>
+            <p><strong>Responsibilites</strong></p>
+            <ul>
+              <li>Design, redesign, and implement User Interface on web with a focus on the client-side.</li>
+              <li>Testing and maintaing client-side code.</li>
+            </ul>
+            <p><strong>Qualifications</strong></p>
+            <ul>
+              <li>Fresh graduate on Computer Science, Informatics, Design Visual Communication, or related field.</li>
+              <li>Experience in HTML, CSS, Javascript (and AJAX).</li>
+              <li>Experience in PHP/Python.</li>
+              <li>Interest in user interface design.</li>
+            </ul>
+
+            <hr>
+
+            <h6 id="job2" class="anchor-about">Back End Web Developer</h5>
+            <div class="spacer" style="height:10px"></div>
+            <p><strong>Responsibilites</strong></p>
+            <ul>
+              <li>Design, redesign, and implement system for web on the server-side.</li>
+              <li>Testing and maintaing server-side code.</li>
+            </ul>
+            <p><strong>Qualifications</strong></p>
+            <ul>
+              <li>Fresh graduate on Computer Science, Computer Engineering, or Informatics.</li>
+              <li>Experience in PHP/Python/Java.</li>
+              <li>Experience in MySQL/PostgreSQL.</li>
+              <li>Interest in back-end system.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

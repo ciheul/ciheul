@@ -5,31 +5,22 @@ import sys
 import socket
 import config
 from datetime import timedelta
-#from common import get_ip_port
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 # add project path to python path
 DJANGO_ROOT = os.path.realpath('')
-#ANGULAR_SEED_ROOT = os.path.join(DJANGO_ROOT, '../angular-seed')
 PROJECT_PATH = os.path.join(DJANGO_ROOT, 'ciheul')
 sys.path += [PROJECT_PATH]
 
-# get ip address and port.
-#IP_ADDRESS, PORT = get_ip_port()
-
 ADMINS = (
-    ('Winnu Ayi Satria', 'winnuayi@gmail.com'),
-    ('Galih Kanigoro', 'galih.kanigoro@gmail.com'),
+    ('Winnu Ayi Satria', 'winnu@ciheul.com'),
+    ('Galih Kanigoro', 'galih@ciheul.com'),
 )
 
 MANAGERS = ADMINS
-
-#try:
-#    IP_ADDR = socket.gethostbyname(socket.gethostname())
-#except socket.gaierror:
-#    print "Error: Django setting for assigning IP Address."
 
 DATABASES = {
     'default': {
@@ -93,7 +84,7 @@ STATIC_URL = '/static/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     os.path.join(DJANGO_ROOT, 'ciheul/static'),
-    #os.path.join(DJANGO_ROOT, '../angular-seed'),
+    #os.path.join(DJANGO_ROOT, 'ciheul/home/static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -126,6 +117,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'corsheaders.middleware.CorsMiddleware',
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
@@ -138,9 +130,8 @@ WSGI_APPLICATION = 'ciheul.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, 'templates'),
-    #os.path.join(DJANGO_ROOT, '../angular-seed/jendela24' ),
-    os.path.join(DJANGO_ROOT, '../angular-seed' ),
+    #os.path.join(PROJECT_PATH, 'templates'),
+    os.path.join(DJANGO_ROOT, 'ciheul/home/templates/home'),
 )
 
 INSTALLED_APPS = (
@@ -154,19 +145,11 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    #'bootstrap_toolkit',
 
     # ciheul apps
     'accounts',
     'home',
-    #'ciheul',
-    #'bigear',
-    #'bigdrive',
-    #'dirban',
-    #'bigpath', 
-    #'juara',
     'jendela24',
-    'south',
 
     # third plugin
     'corsheaders',
@@ -174,10 +157,12 @@ INSTALLED_APPS = (
     'provider',
     'provider.oauth2',
     'tastypie',
+    'south',
 
     # useless
     # python-social is replaced by rauth
     #'social.apps.django_app.default',
+    #'bootstrap_toolkit',
 
     # maybe in the future this module would be implemented
     #'registration',
@@ -254,8 +239,8 @@ CELERY_RESULT_BACKEND = 'redis://'
 CELERYBEAT_SCHEDULE = {
     'fetch-rss-every-10-minutes': {
         'task': 'jendela24.celery.fetch_rss',
-        'schedule': timedelta(minutes=5),
-        #'schedule': timedelta(minutes=1),
+        #'schedule': timedelta(minutes=5),
+        'schedule': timedelta(minutes=1),
         #'schedule': timedelta(seconds=15),
     },        
 }

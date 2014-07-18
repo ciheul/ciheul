@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content=" ">
+  <meta name="author" content="CreateIT">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <script src="/static/home/js/modernizr.js"></script>
+  <script src="/static/home/js/device.min.js"></script>
+
+  <title> Di sini angan jadi nyata</title>
+
+  <link rel="stylesheet" type="text/css" href="/static/home/css/style.css">
+  <link rel="stylesheet" type="text/css" href="/static/home/css/green.css">
+  <link rel="stylesheet" type="text/css" href="/static/home/css/animate.css">
+
+  {% block style %}{% endblock %}
+
+  <!--[if lt IE 9]>
+  <script src="./bootstrap/js/html5shiv.js"></script>
+  <script src="./bootstrap/js/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+
+<body id="top" class="initAnimate">
+
+<!-- Begin Navigation -->
+{% block topnav %}
+<nav id="navigation" class="navbar navbar-transparent navbar-fixed-top remove-left-red navbar-has-transition" role="navigation">
+{% endblock %}
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/home{% ifequal page 'home' %}#{% endifequal%}"><strong>Ciheul</strong></a>
+    </div>
+    <div class="triangle visible-md visible-lg"></div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          {% ifequal page 'home' %}
+          <li class="active"><a href="/home#">Home</a></li>
+          {% else %}
+          <li><a href="/home">Home</a></li>
+          {% endifequal %}
+
+          {% ifequal page 'about' %}
+          <li class="active"><a href="/home/about#">About</a></li>
+          {% else %}
+          <li><a href="/home/about">About</a></li>
+          {% endifequal %}
+
+          {% ifequal page 'jobs' %}
+          <li class="active"><a href="/home/jobs#">Jobs</a></li>
+          {% else %}
+          <li><a href="/home/jobs">Jobs</a></li>
+          {% endifequal %}
+
+          {% ifequal page 'contact' %}
+          <li class="active"><a href="/home/contact#">Contact</a></li>
+          {% else %}
+          <li><a href="/home/contact">Contact</a></li>
+          {% endifequal %}
+        </ul>
+    </div>
+    <!-- /.navbar-collapse -->
+</nav>
+<!-- End Navigation -->
+
+
+{% block content %}{% endblock %}
+
+
+<a href="#top" id="toTop" class="btn-scroll"><i class="fa fa-chevron-up"></i> Back to top</a>
+<!-- End Main Container -->
+
+<script src="/static/home/js/jquery.min.js"></script>
+<script src="/static/home/bootstrap/js/bootstrap.min.js"></script>
+
+<script src="/static/home/js/jquery.parallax.js"></script>
+
+<script src="/static/home/js/jquery.easy-pie-chart.js"></script>
+
+<script src="/static/home/js/jquery.isotope.min.js"></script>
+<script src="/static/home/js/jquery.ba-bbq.min.js"></script>
+
+<script src="/static/home/js/gmap3.min.js"></script>
+
+<script src="/static/home/js/d3.v3.min.js"></script>
+<script src="/static/home/js/topojson.v1.min.js"></script>
+
+<script src="/static/home/js/jquery.sticky.js"></script>
+
+<script src="/static/home/js/jquery.colorbox-min.js"></script>
+<script src="/static/home/flexslider/jquery.flexslider.js"></script>
+
+<script src="/static/home/js/jquery.fitvids.js"></script>
+
+<script src="/static/home/form/js/contact-form.js"></script>
+<script src="/static/home/twitter/js/jquery.tweet.js"></script>
+<script src="/static/home/js/jquery.appear.js"></script>
+
+<script src="/static/home/js/main.js"></script>
+
+<script src="/static/home/js/less.min.js"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52972025-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

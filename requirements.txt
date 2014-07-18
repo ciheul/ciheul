@@ -1,5 +1,7 @@
 boilerpipe==1.2.0.0
 celery==3.1.11
+kombu==3.0.19
+billiard==3.3.0.17
 Django==1.5.2
 django-cors-headers==0.12
 django-oauth2-provider==0.2.6
@@ -17,6 +19,7 @@ numpy==1.6.1
 pandas==0.12.0
 psycopg2==2.5.1
 python-social-auth==0.1.23
+pyopenssl==0.14
 rauth==0.7.0
 redis==2.7.6
 requests==1.2.3

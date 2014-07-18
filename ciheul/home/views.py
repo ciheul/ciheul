@@ -1,27 +1,53 @@
-from django.shortcuts import render
 from django.conf import settings
+from django.shortcuts import render
+
 import os.path
 
 
 def home(request):
-    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/home/index.html'))
+    page = 'home' 
+    return render(request, 
+                  os.path.join(settings.DJANGO_ROOT,
+                               'ciheul/home/templates/home/index.html'),
+                  {'page': page})
 
 
 def about(request):
-    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/home/about-us.html'))
-
-
-def team(request):
-    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/home/team.html'))
-
-
-def services(request):
-    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/home/services.html'))
-
-
-def portfolio(request):
-    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/home/portfolio.html'))
+    page = 'about'
+    return render(request, 
+                  os.path.join(settings.DJANGO_ROOT, 
+                               'ciheul/home/templates/home/about-us.html'),
+                  {'page': page})
 
 
 def contact(request):
-    return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/home/contact.html'))
+    page = 'contact'
+    return render(request,
+                  os.path.join(settings.DJANGO_ROOT,
+                               'ciheul/home/templates/home/contact.html'),
+                  {'page': page})
+
+
+def jobs(request):
+    page = 'jobs'
+    return render(request,
+                  os.path.join(settings.DJANGO_ROOT,
+                               'ciheul/home/templates/home/jobs.html'),
+                  {'page': page})
+
+def team(request):
+    return render(request, 
+                  os.path.join(settings.DJANGO_ROOT,
+                               '../home/templates/team.html'))
+
+
+def services(request):
+    return render(request, 
+                  os.path.join(settings.DJANGO_ROOT, 
+                               '../home/templates/services.html'))
+
+
+def portfolio(request):
+    return render(request, 
+                  os.path.join(settings.DJANGO_ROOT,
+                               '../home/templates/portfolio.html'))

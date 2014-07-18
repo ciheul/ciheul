@@ -1,0 +1,54 @@
+{% extends "base_home.html" %}
+
+
+{% block style %}
+    <style>
+        h2.anchor-about {display: block; position: relative; top: -250px; visibility: hidden;}
+    </style>
+{% endblock %}
+
+
+{% block topnav %}
+    <nav id="navigation-blog" class="navbar navbar-default navbar-fixed-top" role="navigation">
+{% endblock %}
+
+
+{% block content %}
+<div class="spacer" style="height:60px"></div>
+<div class="container blog padding-small">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="spacer" style="height:15px"></div>
+            <div class="list-group">
+              <a href="#" class="list-group-item">About Ciheul Engineering</a>
+              <a href="#vmv" class="list-group-item">Vision, Mission & Value</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h5 id="ciheul" class="anchor-about">About Ciheul Engineering</h5>
+            <p>Ciheul Engineering is an information technology company that offers solution for your business needs. Our experience and expertise in IT has made Ciheul as a company that will deliver the best services in any situation.</p>
+            <p>IT expertise is our passion. It is our utmost passion to design and implement technology-based solution that gives stakeholders in your organization the right "tools" to make better decision. Moreover, using our solution will optimize your cost effectively and efficiently that leads to achieve high productivity.</p>
+            <p>It is our honor to help your business to be the best by prioritizing your trust and satisfaction.</p>
+
+            <hr>
+            <h5 id="vmv" class="anchor-about">Vision, Mission, &amp Value</h5>
+            <p><strong>Vision</strong></p>
+            <ul>
+              <li>To organize information and use it to make the world a better place.</li>
+            </ul>
+            <p><strong>Mission</strong></p>
+            <ul>
+              <li>Improving Indonesia human resource to compete in the world level.</li>
+              <li>Delivering trusted solution for our clients.</li>
+              <li>Giving satisfaction to our clients, people, and investor.</li>
+            </ul>
+            <p><strong>Value</strong></p>
+            <ul>
+              <li><i>Trust is our business.</i><br>Built on trust, success will grow together and makes everyone happy.</li>
+              <li><i>Customer-oriented first and all else will follow.</i><br>We believe your satisfaction is important. Afterwards, all good values will come.</li>
+              <li><i>Our people are our most important asset.</i><br>Whoever works in Ciheul is our important asset. That is why, working should be fun.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

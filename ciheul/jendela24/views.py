@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from socketio import socketio_manage
 from socketio.namespace import BaseNamespace
-from social.backends.twitter import TwitterOAuth
+#from social.backends.twitter import TwitterOAuth
 from redis import StrictRedis
 from celery import Celery
 from .celery import publish_news
@@ -30,10 +30,7 @@ def home(request):
         'status': status,
     }
 
-    #if request.flavour == 'mobile':
     return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/mnp/index.html'), context)
-    #elif request.flavour == 'full':
-    #return render(request, os.path.join(settings.DJANGO_ROOT, '../angular-seed/jendela24/index.html'), context)
 
 
 def socketio(request):
